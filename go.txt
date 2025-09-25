@@ -1,0 +1,11 @@
+- backend: nodeJS 
+- frontend: react con typescript
+- real time db: redis 
+
+http:/webhook.it/awdhiu1h2ui3u12ig13iy
+
+http:/webhook.it/view/awdhiu1h2ui3u12ig13iy
+
+location view/ {
+    proxy_pass: 
+}
