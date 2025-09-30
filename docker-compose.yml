@@ -1,1 +1,59 @@
-ffdsa
+services:
+  # backend:
+  #   build:
+  #     context: .
+  #     dockerfile: backend/Dockerfile
+  #   container_name: backend
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./backend:/app
+  #   networks:
+  #     - backend_network
+  #   environment:
+  #     MYSQL_HOST: "mysql"
+  #     MYSQL_USER: "root"
+  #     MYSQL_PASSWORD: "password_root"
+  #     MYSQL_DATABASE: "test"
+  #     PORT: "3000"
+  #     JWT_SECRET: "segreto super segreto"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    # volumes:
+    #   - ./frontend:/app
+    networks:
+      - backend_network
+    environment:
+      PORT: "5173"
+      # API_BASE_URL: "http://backend:3000"  # Per chiamare il backend dalle view/server
+
+  # mysql:
+  #   image: mysql:8.0
+  #   container_name: mysql
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=password_root
+  #     - MYSQL_DATABASE=test
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql-data:/var/lib/mysql
+  #   networks:
+  #     - backend_network
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+  #     interval: 5s
+  #     timeout: 10s
+  #     retries: 5
+
+# volumes:
+#   mysql-data:
+
+networks:
+  backend_network:
+    driver: bridge
