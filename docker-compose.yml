@@ -30,6 +30,13 @@ services:
     environment:
       PORT: "5173"
 
+  nginx:
+    build: ./nginx
+    ports: 
+      - "80:80"
+    networks:
+      - backend_network
+
 networks:
   backend_network:
     driver: bridge
