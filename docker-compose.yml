@@ -11,11 +11,9 @@ services:
     networks:
       - backend_network
     environment:
-      MYSQL_HOST: "mysql"
-      MYSQL_USER: "root"
-      MYSQL_PASSWORD: "password_root"
-      MYSQL_DATABASE: "test"
-      PORT: "3000"
+      REDIS_HOST : "redis"
+      REDIS_PORT: "6379"
+      PORT : "3000"
       JWT_SECRET: "your_jwt_secret"
 
   frontend:
@@ -36,6 +34,19 @@ services:
       - "80:80"
     networks:
       - backend_network
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    # volumes:
+    #   - redis_data:/data
+    networks:
+      - backend_network
+    command: ["redis-server", "--appendonly", "yes"]
+
+# volumes:
+#   redis_data:
 
 networks:
   backend_network:
