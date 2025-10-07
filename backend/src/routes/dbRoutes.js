@@ -1,9 +1,9 @@
-import express from 'express';
+import express from 'express'
+import {setRequest } from '../controllers/dbController.js'
 
-const router = express.Router();
+const dbRouter = express.Router()
 
-router.get("/test", (req, res) => {
-    res.send("ciao");
-});
+dbRouter.get('/test', setRequest)
 
-export default router;
+
+export { dbRouter }
