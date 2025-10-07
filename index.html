@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+
+        let d = "";
+        fetch("http://localhost:3000/")
+        .then((res) => res.text())
+        .then((data) => d = data)
+
+        const socket = io("http://localhost:3000/");
+
+        socket.on("connect", () => {
+            console.log("connesso con id: ", socket.id);
+            socket.emit("register", d);
+        });
+
+        socket.on("msg", (msg) => {
+            console.log(msg);
+        });
+
+    </script>
+</body>
+
+</html>

@@ -19,11 +19,19 @@ router.get("/", (req, res) => {
         sameSite: 'Lax' 
     });
 
-    res.send(token);
+    res.send(hookId);
 });
 
 // Rotta che riceve i dati, da cambiare GET
 router.get("/:id", (req, res) => {
+    console.log(req.params.id);
+    const hookId = req.params.id;
+    const client = req.clients.get(hookId);
+    
+    console.log(client);
+
+    client.emit("msg", { hookId });
+    
     res.send(req.params.id);
 });
 

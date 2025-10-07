@@ -1,22 +1,45 @@
 import express from 'express';
 import apiRoutes from './routes/api.js'
-import jwt from 'jsonwebtoken';
-import cookieParser from 'cookie-parser';
 import { redisConnection } from './database/connection.js';
-const app = express();
+import {Server} from 'socket.io';
+import http from 'http';
+import cors from 'cors';
 
-app.use(cookieParser("pisello"));
+const app = express();
+const server = http.createServer(app);
+
+app.use(cors());
+
+export const io = new Server(server, {
+    cors : {
+        "origin": "*"
+    }
+});
 
 let redisClient;
+const clients = new Map();
 
-(async () => {
-    redisClient = await redisConnection();
-})();
+// (async () => {
+//     redisClient = await redisConnection();
+// })();
+
+io.on('connection', (socket) => {
+    socket.on("register", (hookId) => {
+        clients.set(hookId, socket);
+        console.log(clients);
+    });
+});
+
+app.use((req, res, next) => {
+    req.io = io;
+    req.clients = clients;
+
+    next();
+});
 
 app.use('/', apiRoutes);
 app.use('/api', apiRoutes);
 
-
-app.listen(3000, async () => {
+server.listen(3000, async () => {
     console.log("Server in ascolto su http://localhost:3000")
 });
