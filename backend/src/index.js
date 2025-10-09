@@ -10,7 +10,7 @@ const server = http.createServer(app);
 
 app.use(cors());
 
-export const io = new Server(server, {
+const io = new Server(server, {
     cors : {
         "origin": "*"
     }
@@ -19,9 +19,9 @@ export const io = new Server(server, {
 let redisClient;
 const clients = new Map();
 
-// (async () => {
-//     redisClient = await redisConnection();
-// })();
+(async () => {
+    redisClient = await redisConnection();
+})();
 
 io.on('connection', (socket) => {
     socket.on("register", (hookId) => {
@@ -33,6 +33,7 @@ io.on('connection', (socket) => {
 app.use((req, res, next) => {
     req.io = io;
     req.clients = clients;
+    req.redisClient = redisClient;
 
     next();
 });
