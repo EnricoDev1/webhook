@@ -8,6 +8,7 @@ services:
       - "3000:3000"
     volumes:
       - ./backend:/app
+      - /app/node_modules
     networks:
       - backend_network
     environment:
@@ -23,6 +24,9 @@ services:
     container_name: frontend
     ports:
       - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     networks:
       - backend_network
     environment:
