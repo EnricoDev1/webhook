@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter as Router, Routes, Route, Link, useParams, Navigate } from "react-router-dom";
+import { use, useState, useEffect } from 'react'
+import axios from 'axios';
+import { io } from 'socket.io-client';
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+function Home() {
+  const [response, setResponse] = useState("");
+  const [error, setError] = useState(null);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  useEffect(() => {
+    axios.get('http://localhost/')
+    .then((res) => {
+      setResponse(res.data);
+    })
+    .catch((error) => {
+      setError(error.message);
+    });
+
+  }, []);
+
+  if (error) return <h2>Errore: {error} DIOCANE</h2>
+  if (!response) return <h2>Caricamento...</h2>
+
+  const url = `/v/${response.token}`;
+  return <Navigate to={url} />;
 }
 
-export default App
+function ViewHook() {
+  const { hookId } = useParams();
+  const socket = io('http://localhost/');
+  
+  socket.emit("register", hookId);
+
+  return <p>UUID ricevuto: <strong>{hookId}</strong></p>
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/v/" element={<Home />} />
+        <Route path="/v/:hookId" element={<ViewHook />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
