@@ -2,14 +2,13 @@
 export JWT_SECRET=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 64)
 echo "JWT_SECRET generato: $JWT_SECRET"
 
-docker compose up -d
-
-echo "Attendo Redis..."
-until docker compose exec redis redis-cli ping >/dev/null 2>&1; do
-  sleep 1
-done
-echo "Redis pronto!"
-
-docker compose exec redis redis-cli SET mykey "valore" EX 60
-docker compose exec redis redis-cli SET mykey2 "altro_valore" EX 60
-docker compose logs -f
+if [ "$1" = "-build" ]; then
+    echo "Eseguo docker compose up con --build..."
+    docker compose up --build
+elif [ "$1" = "--down" ]; then
+    echo "Eseguo docker compose up in detached mode..."
+    docker compose down
+else
+    echo "Eseguo docker compose up..."
+    docker compose up
+fi
