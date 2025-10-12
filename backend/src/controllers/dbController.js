@@ -1,19 +1,38 @@
-import {REDIS_TTL} from '../utils.js'
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
 
-const setRequest = async (req, res) => {
+const setUser = async (req, res) => {
     const redisClient = req.redisClient;
-    await redisClient.set(uuid(), req.params.id, { EX: REDIS_TTL });
-    res.send('Chiave impostata');
+    const users = await redisClient.lRange('users:list', 0, -1);
+    const userId = req.body.id;
+    if (!users.includes(userId.toString())) {
+        await redisClient.rPush('users:list', userId);
+        return res.send('Utente aggiunto alla lista');
+    }
+    return res.send('Utente già presente nella lista');
+};
 
-}
-
-const getRequest = async (req, res) => {
+const getUsers = async (req, res) => {
     const redisClient = req.redisClient;
-    const keys = await redisClient.keys('*');
-    const values = await Promise.all(keys.map(key => redisClient.get(key)));
-    const value = Object.fromEntries(keys.map((key, index) => [key, values[index]]));
-    res.json(value);
-}
+    const users = await redisClient.lRange('users:list', 0, -1);
+    res.json(users);
+};
 
-export { setRequest, getRequest }
+
+const setRequestByUser = async (req, res) => {
+    const redisClient = req.redisClient;
+    let request = {}
+    request.id = uuid();
+    request.body = req.body;
+    await redisClient.rPush(`user:${req.params.id}:requests`, JSON.stringify(request));
+};
+
+const getRequestbyUser = async (req, res) => {
+    const redisClient = req.redisClient;
+    const requests = await redisClient.lRange(`user:${req.params.id}:requests`, 0, -1);
+    const parsedRequests = requests.map(request => JSON.parse(request));
+    res.json(parsedRequests);
+};
+
+
+
+export { setUser, getUsers, setRequestByUser, getRequestbyUser };

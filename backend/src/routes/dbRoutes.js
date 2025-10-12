@@ -1,10 +1,12 @@
 import express from 'express'
-import {setRequest, getRequest} from '../controllers/dbController.js'
+import {getRequestbyUser, getUsers, setRequestByUser, setUser} from '../controllers/dbController.js'
 
 const dbRouter = express.Router()
 
-dbRouter.get('/set/:id', setRequest)
-dbRouter.get('/get/', getRequest)
+dbRouter.post('/setUser/', setUser)
+dbRouter.get('/getUsers/', getUsers)
 
+dbRouter.post('/setRequest/:id', setRequestByUser)
+dbRouter.get('/getRequests/:id', getRequestbyUser)
 
 export { dbRouter }

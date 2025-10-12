@@ -11,6 +11,18 @@ const redisConnection = async () => {
     redisClient.on("error", (err) => console.error("Redis Client Error", err));
     await redisClient.connect();
     redisClient.on("connect", () => console.log("Redis client connected successfully"));
+
+    setInterval(async () => {
+        try {
+            console.log("[JOB] Cleaning Redis...");
+            await redisClient.flushDb();
+            console.log("[JOB] Done");
+        } catch (err) {
+            console.error("[JOB] Error: ", err);
+        }
+    }, process.env.REDIS_TTL); // 2 ore in millisecondi
+
+
     return redisClient;
 }
 

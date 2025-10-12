@@ -14,7 +14,7 @@ services:
     environment:
       REDIS_HOST : "redis"
       REDIS_PORT: "6379"
-      REDIS_TTL : "60"
+      REDIS_TTL : "3600000" # in milliseconds (1 hour)
       PORT : "3000"
       JWT_SECRET: "${JWT_SECRET}"
 
