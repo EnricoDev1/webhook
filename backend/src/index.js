@@ -4,13 +4,13 @@ import { redisConnection } from './database/connection.js';
 import {Server} from 'socket.io';
 import http from 'http';
 import cors from 'cors';
+import { emitMessage } from './utils.js';
 
 const app = express();
 const server = http.createServer(app);
 
 app.use(cors());
 app.use(express.json());
-
 
 const io = new Server(server, {
     cors : {
@@ -28,7 +28,6 @@ const clients = new Map();
 io.on('connection', (socket) => {
     socket.on("register", (hookId) => {
         clients.set(hookId, socket);
-        console.log(clients);
     });
 });
 

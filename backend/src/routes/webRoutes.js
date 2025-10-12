@@ -1,36 +1,33 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import {v4 as uuid} from 'uuid';
-import {JWT_SECRET} from '../utils.js';
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    let hookId = uuid();
+    let hookId = uuid();    
 
-    let token = jwt.sign({
-        exp: Math.floor(Date.now() / 1000) + (60 * 120), // 2 ore
-        hookId: hookId
-    }, JWT_SECRET);
-    
-    res.cookie('jwt', token, {
-        httpOnly: true,
-        secure: false, 
-        sameSite: 'Lax' 
-    });
-
-    res.json({"token": hookId});
+    res.redirect(`http://localhost/v/${hookId}`);
 });
 
-// Rotta che riceve i dati, da cambiare GET
 router.get("/:id", (req, res) => {
-    console.log(req.params.id);
-    const hookId = req.params.id;
+    const hookId = req.params.id;    
     const client = req.clients.get(hookId);
-    
-    console.log(client);
-    
-    res.send(req.params.id);
+    const reqId = uuid();
+
+    if (client) {
+        let data = {
+            "id": reqId(),
+            "method": req.method,
+            "headers": req.headers,
+            "body": req.body
+        };
+
+        client.emit("msg", data);
+        res.send(req.params.id);
+    }
+    else {
+        res.send("no hook found");
+    }
 });
 
 export default router;
