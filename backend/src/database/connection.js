@@ -20,8 +20,7 @@ const redisConnection = async () => {
         } catch (err) {
             console.error("[JOB] Error: ", err);
         }
-    }, process.env.REDIS_TTL); // 2 ore in millisecondi
-
+    }, process.env.REDIS_TTL);
 
     return redisClient;
 }

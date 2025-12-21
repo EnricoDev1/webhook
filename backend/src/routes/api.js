@@ -1,5 +1,5 @@
 import express from 'express';
-import {dbRouter} from './dbRoutes.js';
+import dbRouter from './Database.js';
 import webRoutes from './webRoutes.js';
 
 const router = express.Router();
