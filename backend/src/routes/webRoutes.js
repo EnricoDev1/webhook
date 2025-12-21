@@ -3,10 +3,12 @@ import {v4 as uuid} from 'uuid';
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.post("/hookid", (req, res) => {
     let hookId = uuid();    
 
-    res.redirect(`http://localhost/v/${hookId}`);
+    res.json({
+        "id": hookId
+    });
 });
 
 router.get("/:id", (req, res) => {

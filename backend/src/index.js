@@ -38,8 +38,8 @@ app.use((req, res, next) => {
 
     next();
 });
+
 app.use('/', apiRoutes);
-app.use('/api', apiRoutes);
 
 server.listen(3000, async () => {
     console.log("Server in ascolto su http://localhost:3000")
