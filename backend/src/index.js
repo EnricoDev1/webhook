@@ -1,5 +1,5 @@
 import express from 'express';
-import apiRoutes from './routes/api.js'
+import apiRoutes from './routes/Api.js'
 import { redisConnection } from './database/connection.js';
 import {Server} from 'socket.io';
 import http from 'http';
