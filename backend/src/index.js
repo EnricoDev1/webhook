@@ -43,6 +43,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/api', apiRoutes);
 app.all('/:hookId', sendHookMessage);
 app.all('/:hookId/*splat', sendHookMessage);
 

@@ -28,12 +28,20 @@ function App() {
   // Generate webhook URL using getHookId
   useEffect(() => {
     const generateWebhookUrl = async () => {
-      if (!localStorage.getItem('hookId')) {
-        const hookId = await getHookId();
-        localStorage.setItem('hookId', hookId);
+      let hookId = localStorage.getItem('hookId');
+
+      if (!hookId) {
+        hookId = await getHookId();
+        if (hookId) {
+          localStorage.setItem('hookId', hookId);
+        }
       }
-      setWebhookUrl(`${BASE_URL}/${localStorage.getItem('hookId')}`);
+
+      if (hookId) {
+        setWebhookUrl(`${BASE_URL}/${hookId}`);
+      }
     };
+
     generateWebhookUrl();
   }, []);
 
