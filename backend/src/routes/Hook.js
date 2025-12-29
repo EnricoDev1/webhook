@@ -1,5 +1,5 @@
 import express from 'express';
-import { createHook, sendHookMessage } from '../controllers/hookController.js';
+import { createHook } from '../controllers/hookController.js';
 
 const hookRouter = express.Router();
 
