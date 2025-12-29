@@ -1,8 +1,9 @@
 import { v4 as uuid } from 'uuid';
+import { setUser } from './userController.js';
 
 const createHook = (req, res) => {
     const hookId = uuid();
-    res.json({ id: hookId });
+    setUser(req, res, hookId);
 };
 
 const sendHookMessage = (req, res) => {

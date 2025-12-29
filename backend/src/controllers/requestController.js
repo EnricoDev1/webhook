@@ -1,8 +1,8 @@
 import { v4 as uuid } from 'uuid';
 
-const setRequestByUser = async (req, res) => {
+const setRequestByUser = async (req,res,data) => {
     const redisClient = req.redisClient;
-    const token = req.headers.authorization?.split(" ")[1];
+    const token = data.hookId;
     if (!token) return res.status(401).json({ error: "Token mancante" });
 
     const exists = await redisClient.sIsMember('users:set', token);
@@ -10,7 +10,7 @@ const setRequestByUser = async (req, res) => {
 
     const requestId = uuid();
     const request = {
-        body: req.body
+        body: data
     };
 
     await redisClient.hSet(`user:${token}:requests`, requestId, JSON.stringify(request));
