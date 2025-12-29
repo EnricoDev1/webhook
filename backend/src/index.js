@@ -5,7 +5,7 @@ import {Server} from 'socket.io';
 import http from 'http';
 import cors from 'cors';
 import { emitMessage } from './utils.js';
-
+import {sendHookMessage} from './controllers/hookController.js'
 const app = express();
 const server = http.createServer(app);
 
@@ -39,7 +39,8 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/', apiRoutes);
+app.get('/:hookId', sendHookMessage);
+app.use('/api', apiRoutes);
 
 server.listen(3000, async () => {
     console.log("Server in ascolto su http://localhost:3000")
