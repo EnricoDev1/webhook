@@ -29,16 +29,14 @@ const clients = new Map();
 })();
 
 io.on('connection', (socket) => {
-    socket.on("register", (hookId) => {
-        clients.set(hookId, socket);
-    });
+    const hookId = socket.handshake.query.hookId;
+    clients.set(hookId, socket);
 });
 
 app.use((req, res, next) => {
     req.io = io;
     req.clients = clients;
     req.redisClient = redisClient;
-
     next();
 });
 
