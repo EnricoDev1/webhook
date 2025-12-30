@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import { setUser } from './userController.js';
+import { setRequestByUser } from './requestController.js';
 
 const createHook = (req, res) => {
     const hookId = uuid();
@@ -7,7 +8,7 @@ const createHook = (req, res) => {
 };
 
 const sendHookMessage = (req, res) => {
-    const hookId = req.params.id;
+    const hookId = req.params.hookId;
     const reqId = uuid();
     const client = req.clients.get(hookId);
 
@@ -31,7 +32,7 @@ const sendHookMessage = (req, res) => {
     };
     
     // client.emit("new-request", data);
-    res.send(data);
+    setRequestByUser(req,res,data)
 };
 
 export { createHook, sendHookMessage };

@@ -1,30 +1,33 @@
 import { v4 as uuid } from 'uuid';
+import { checkUser } from '../utils/checkUser.js';
 
-const setRequestByUser = async (req,res,data) => {
-    const redisClient = req.redisClient;
-    const token = data.hookId;
-    if (!token) return res.status(401).json({ error: "Token mancante" });
+const setRequestByUser = async (req, res, data) => {
+    try {
+        const redisClient = req.redisClient;
+        const token = data.hookId;
 
-    const exists = await redisClient.sIsMember('users:set', token);
-    if (!exists) return res.status(404).json({ error: "Utente non trovato" });
+        // Controllo utente con funzione riutilizzabile
+        const result = await checkUser(redisClient, token);
+        if (!result.ok) {
+            return res.status(result.error === 'Token mancante' ? 401 : 404)
+                .json({ error: result.error });
+        }
 
-    const requestId = uuid();
-    const request = {
-        body: data
-    };
+        const requestId = uuid();
+        const request = { body: data };
 
-    await redisClient.hSet(`user:${token}:requests`, requestId, JSON.stringify(request));
+        await redisClient.hSet(`user:${token}:requests`, requestId, JSON.stringify(request));
 
-    return res.json({ message: 'Richiesta aggiunta', requestId });
+        return res.json({ message: 'Richiesta aggiunta', requestId });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Errore interno' });
+    }
 };
+
 
 const getRequestByUser = async (req, res) => {
     const redisClient = req.redisClient;
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ error: "Token mancante" });
-
-    const exists = await redisClient.sIsMember('users:set', token);
-    if (!exists) return res.status(404).json({ error: "Utente non trovato" });
 
     const requests = await redisClient.hGetAll(`user:${token}:requests`);
 
@@ -38,14 +41,9 @@ const getRequestByUser = async (req, res) => {
 
 const deleteRequestByUser = async (req, res) => {
     const redisClient = req.redisClient;
-    const token = req.headers.authorization?.split(" ")[1];
     const requestId = req.params.id;
 
-    if (!token) return res.status(401).json({ error: "Token mancante" });
     if (!requestId) return res.status(400).json({ error: "Parametri mancanti: requestId" });
-
-    const exists = await redisClient.sIsMember('users:set', token);
-    if (!exists) return res.status(404).json({ error: "Utente non trovato" });
 
     const deleted = await redisClient.hDel(`user:${token}:requests`, requestId);
 
@@ -54,4 +52,4 @@ const deleteRequestByUser = async (req, res) => {
     return res.json({ message: "Richiesta eliminata con successo" });
 };
 
-export {setRequestByUser, getRequestByUser, deleteRequestByUser };
+export { setRequestByUser, getRequestByUser, deleteRequestByUser };
