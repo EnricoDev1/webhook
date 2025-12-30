@@ -11,7 +11,7 @@ export const getHookId = async () => {
 export const fetchRequests = async (token) => {
   const res = await fetch('http://localhost/api/db/request', {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `${token}`,
       'Content-Type': 'application/json',
     },
   });
@@ -23,7 +23,7 @@ export const deleteRequest = async (id, token) => {
   const res = await fetch(`http://localhost/api/db/request/${id}`, {
     method: 'DELETE',
     headers: {
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `${token}`,
       'Content-Type': 'application/json',
     },
   });

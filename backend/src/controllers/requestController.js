@@ -28,7 +28,7 @@ const setRequestByUser = async (req, res, data) => {
 
 const getRequestByUser = async (req, res) => {
     const redisClient = req.redisClient;
-
+    const token = req.headers.authorization;
     const requests = await redisClient.hGetAll(`user:${token}:requests`);
 
     const parsedRequests = Object.entries(requests).map(([id, data]) => ({
@@ -42,6 +42,7 @@ const getRequestByUser = async (req, res) => {
 const deleteRequestByUser = async (req, res) => {
     const redisClient = req.redisClient;
     const requestId = req.params.id;
+    const token = req.headers.authorization;
 
     if (!requestId) return res.status(400).json({ error: "Parametri mancanti: requestId" });
 

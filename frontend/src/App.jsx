@@ -5,6 +5,7 @@ import RequestList from './components/RequestList';
 import RequestDetails from './components/RequestDetails';
 import { useWebhook } from './hooks/useWebhook';
 import { useSocket } from './hooks/useSocket';
+import {useRequests} from './hooks/useRequests' 
 
 function App() {
   const [requests, setRequests] = useState([]);
@@ -16,6 +17,7 @@ function App() {
   const textClass = darkMode ? 'text-gray-100' : 'text-gray-900';
 
   useSocket();
+  useRequests();
   // change the page url to the correct one
   useEffect(() => {
     const hookId = localStorage.getItem('hookId');
