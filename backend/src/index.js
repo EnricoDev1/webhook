@@ -5,7 +5,6 @@ import {Server} from 'socket.io';
 import http from 'http';
 import cors from 'cors';
 import {sendHookMessage} from './controllers/hookController.js'
-import { emitMessage } from './utils.js';
 
 const app = express();
 const server = http.createServer(app);
