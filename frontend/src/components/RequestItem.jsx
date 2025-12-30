@@ -11,82 +11,74 @@ export default function RequestItem({
   onDelete,
   darkMode,
 }) {
-  const hoverBgClass = darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50';
-  const selectedBgClass = darkMode ? 'bg-blue-900/30' : 'bg-blue-50';
-  const textMutedClass = darkMode ? 'text-gray-400' : 'text-gray-600';
+  const baseClasses = `
+    block p-4 rounded-lg cursor-pointer transition-all duration-200
+    border
+  `;
+
+  const hoverClasses = darkMode 
+    ? 'hover:bg-gray-700 hover:border-gray-600' 
+    : 'hover:bg-gray-50 hover:border-gray-300';
+
+  const selectedClasses = darkMode
+    ? 'bg-blue-900/50 border-blue-600 ring-2 ring-blue-500/50'
+    : 'bg-blue-50 border-blue-400 ring-2 ring-blue-300/50';
+
+  const textMuted = darkMode ? 'text-gray-400' : 'text-gray-600';
 
   return (
     <div
-      className={`p-3 cursor-pointer transition-colors ${hoverBgClass} ${
-        isSelected ? selectedBgClass : ''
-      }`}
+      className={`${baseClasses} ${isSelected ? selectedClasses : 'border-transparent'} ${hoverClasses}`}
       onClick={() => onSelect(request)}
     >
-      <div className="flex justify-between items-start mb-2">
-        <div className="flex items-center space-x-2">
-          <span
-            className={`px-1.5 py-0.5 rounded text-xs font-medium ${getMethodColor(
-              request.method,
-              darkMode
-            )}`}
-          >
+      {/* Top row: Method, Status, Delete */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${getMethodColor(request.method, darkMode)}`}>
             {request.method}
           </span>
-          <span
-            className={`px-1.5 py-0.5 rounded text-xs ${getStatusColor(
-              request.statusCode,
-              darkMode
-            )}`}
-          >
+          <span className={`px-2.5 py-1 rounded text-xs font-medium ${getStatusColor(request.statusCode, darkMode)}`}>
             {request.statusCode}
           </span>
         </div>
+
         <button
           onClick={(e) => {
             e.stopPropagation();
             onDelete(request.id);
           }}
-          className={`p-1 rounded hover:bg-red-900/20 ${
-            darkMode
-              ? 'text-gray-400 hover:text-red-300'
-              : 'text-gray-500 hover:text-red-500'
-          }`}
+          className={`
+            p-2 rounded-lg transition-all opacity-60 hover:opacity-100
+            ${darkMode 
+              ? 'hover:bg-red-900/40 text-red-400' 
+              : 'hover:bg-red-100 text-red-600'}
+          `}
           aria-label="Delete request"
         >
-          <Trash2 className="h-3 w-3" />
+          <Trash2 className="h-4 w-4" />
         </button>
       </div>
 
-      <div className="space-y-1.5 text-xs">
-        <div className="flex items-center">
-          <User className={`h-2.5 w-2.5 mr-1.5 ${textMutedClass}`} />
-          <span className={`truncate ${textMutedClass}`}>{request.ip}</span>
+      {/* Details */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <User className={`h-4 w-4 ${textMuted}`} />
+          <span className={`text-sm ${textMuted}`}>{request.ip}</span>
         </div>
 
-        <div className="flex items-center">
-          <span className={`mr-1.5 ${textMutedClass}`}>Path:</span>
-          <span className="font-mono truncate">{request.url}</span>
+        <div className="truncate">
+          <span className={`text-xs ${textMuted} mr-2`}>Path:</span>
+          <code className="text-sm font-mono bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded">
+            {request.url}
+          </code>
         </div>
 
-        <div>
-          <span className={`mr-1.5 ${textMutedClass}`}>Agent:</span>
-          <span className="truncate block">
-            {request.headers['User-Agent']}
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Clock className={`h-2.5 w-2.5 mr-1.5 ${textMutedClass}`} />
-            <span className={textMutedClass}>
-              {formatTimeAgo(request.timestamp)}
-            </span>
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <Clock className={`h-3.5 w-3.5 ${textMuted}`} />
+            <span className={textMuted}>{formatTimeAgo(request.timestamp)}</span>
           </div>
-          <span
-            className={`text-xs font-medium ${
-              darkMode ? 'text-gray-400' : 'text-gray-500'
-            }`}
-          >
+          <span className={`font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
             {request.time}ms
           </span>
         </div>
