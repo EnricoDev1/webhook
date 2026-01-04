@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { setUser } from './userController.js';
 import { setRequestByUser } from './requestController.js';
-import {getFilesInfo, getSafeBody} from '../utils.js';
+import {getFilesInfo, getSafeBody} from '../utils/requestSanitizer.js';
 
 const createHook = (req, res) => {
     const hookId = uuid();
@@ -10,7 +10,6 @@ const createHook = (req, res) => {
 
 const sendHookMessage = (req, res) => {
     const hookId = req.params.hookId;
-    const reqId = uuid();
     const client = req.clients.get(hookId);
 
     const data = {
@@ -44,7 +43,6 @@ const sendHookMessage = (req, res) => {
     if(client) {
         client.emit("new-request", JSON.stringify(data));
     } 
-
     setRequestByUser(req, res, data)
 };
 

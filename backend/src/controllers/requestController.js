@@ -15,7 +15,6 @@ const setRequestByUser = async (req, res, data) => {
 
         const requestId = uuid();
         const request = data;
-        console.log(request)
         await redisClient.hSet(`user:${token}:requests`, requestId, JSON.stringify(request));
 
         return res.json({ message: 'Richiesta aggiunta', requestId });
