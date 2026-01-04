@@ -8,9 +8,9 @@ export default function WebhookUrlBar({ webhookUrl, darkMode }) {
       <div className="flex items-center">
         <Globe className={`h-4 w-4 mr-2 ${darkMode ? 'text-green-400' : 'text-green-500'}`} />
         <span className="font-medium">Your Webhook URL:</span>
-        <code className={`ml-2 px-3 py-1.5 bg-gray-900 text-green-400 rounded font-mono text-sm`}>
+        <a href={`${webhookUrl}`} target='_blank' className={`ml-2 px-3 py-1.5 bg-gray-900 text-green-400 rounded font-mono text-sm underline decoration`}>
           {webhookUrl || 'Loading...'}
-        </code>
+        </a>
       </div>
       <button onClick={handleCopy} className="flex items-center px-3 py-1.5 rounded text-sm bg-blue-600 hover:bg-blue-700 text-white transition-colors">
         <Copy className="h-3.5 w-3.5 mr-1.5" />
