@@ -15,7 +15,6 @@ const sendHookMessage = (req, res) => {
 
     const data = {
         hookId: hookId,
-        id: reqId,
         timestamp: Date.now(), 
 
         request: {
