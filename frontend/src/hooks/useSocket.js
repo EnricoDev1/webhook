@@ -25,6 +25,10 @@ export const useSocket = () => {
       console.error('Socket connection error:', err.message);
     });
 
+    socket.on("new-request", (data) => {
+      console.log(data);
+    });
+
     // Cleanup on unmount
     return () => {
       socket.disconnect();

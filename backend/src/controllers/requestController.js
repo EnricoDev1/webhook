@@ -5,17 +5,17 @@ const setRequestByUser = async (req, res, data) => {
     try {
         const redisClient = req.redisClient;
         const token = data.hookId;
-
+        
         // Controllo utente con funzione riutilizzabile
         const result = await checkUser(redisClient, token);
         if (!result.ok) {
             return res.status(result.error === 'Token mancante' ? 401 : 404)
-                .json({ error: result.error });
+            .json({ error: result.error });
         }
-
+        
         const requestId = uuid();
-        const request = { body: data };
-
+        const request = data;
+       
         await redisClient.hSet(`user:${token}:requests`, requestId, JSON.stringify(request));
 
         return res.json({ message: 'Richiesta aggiunta', requestId });

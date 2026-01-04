@@ -1,4 +1,4 @@
-const setUser = async (req, res,hookId) => {
+const setUser = async (req, res, hookId) => {
     const redisClient = req.redisClient;
     if (!hookId) {
         return res.status(400).json({ error: "Parametri mancanti: id" });
@@ -11,6 +11,7 @@ const setUser = async (req, res,hookId) => {
         return res.status(400).json({ error: 'Utente già presente' });
     }
 };
+
 const getUser = async (req, res) => {
     const redisClient = req.redisClient;
     const { id: userId } = req.params;
