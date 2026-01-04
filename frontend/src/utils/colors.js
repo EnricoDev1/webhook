@@ -1,7 +1,7 @@
 export const getMethodColor = (method, darkMode) => {
   const darkColors = {
-    GET: 'bg-blue-900/30 text-blue-300 border border-blue-800/50',
-    POST: 'bg-green-900/30 text-green-300 border border-green-800/50',
+    GET: 'bg-green-900/30 text-green-300 border border-green-800/50',
+    POST: 'bg-blue-900/30 text-blue-300 border border-blue-800/50',
     PUT: 'bg-yellow-900/30 text-yellow-300 border border-yellow-800/50',
     DELETE: 'bg-red-900/30 text-red-300 border border-red-800/50'
   };

@@ -10,19 +10,7 @@ export function useRequests() {
       const token = localStorage.getItem('hookId');
       const data = await fetchRequests(token);
 
-      setRequests(
-        data.slice(0, 20).map(item => ({
-          id: item.id,
-          method: item.method,
-          url: `/api/webhook/${item.id}`,
-          timestamp: new Date(),
-          statusCode: 200,
-          headers: item.headers || {},
-          body: JSON.stringify(item, null, 2),
-          ip: item.ip || '127.0.0.1',
-          time: Math.floor(Math.random() * 1000),
-        }))
-      );
+      setRequests(data);
     };
 
     load();

@@ -1,7 +1,7 @@
 // src/components/RequestList/RequestItem.jsx
 import React from 'react';
 import { Trash2, User, Clock } from 'lucide-react';
-import { getMethodColor, getStatusColor } from '../utils/colors';
+import { getMethodColor } from '../utils/colors';
 import { formatTimeAgo } from '../utils/formatters';
 
 export default function RequestItem({
@@ -26,19 +26,17 @@ export default function RequestItem({
 
   const textMuted = darkMode ? 'text-gray-400' : 'text-gray-600';
   console.log(request);
+
   return (
     <div
       className={`${baseClasses} ${isSelected ? selectedClasses : 'border-transparent'} ${hoverClasses}`}
       onClick={() => onSelect(request)}
     >
-      {/* Top row: Method, Status, Delete */}
+      {/* Top row: Method, Delete */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
-          <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${getMethodColor(request.method, darkMode)}`}>
-            {request.method}
-          </span>
-          <span className={`px-2.5 py-1 rounded text-xs font-medium ${getStatusColor(request.statusCode, darkMode)}`}>
-            {request.statusCode}
+          <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${getMethodColor(request.content.request.method, darkMode)}`}>
+            {request.content.request.method}
           </span>
         </div>
 
@@ -62,24 +60,23 @@ export default function RequestItem({
       {/* Details */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <User className={`h-4 w-4 ${textMuted}`} />
-          <span className={`text-sm ${textMuted}`}>{request.ip}</span>
+          <span className={`text-sm ${textMuted}`}>{request.content.request.ip}</span>
         </div>
 
         <div className="truncate">
           <span className={`text-xs ${textMuted} mr-2`}>Path:</span>
           <code className="text-sm font-mono bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded">
-            {request.url}
+            {request.content.request.path}
           </code>
         </div>
 
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <Clock className={`h-3.5 w-3.5 ${textMuted}`} />
-            <span className={textMuted}>{formatTimeAgo(request.timestamp)}</span>
+            <span className={textMuted}>{formatTimeAgo(request.content.timestamp)}</span>
           </div>
           <span className={`font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-            {request.time}ms
+            {request.content.timestamp}ms
           </span>
         </div>
       </div>
