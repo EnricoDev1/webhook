@@ -33,7 +33,7 @@ const getRequestByUser = async (req, res) => {
 
     const parsedRequests = Object.entries(requests).map(([id, data]) => ({
         id,
-        content: JSON.parse(data)
+        ...JSON.parse(data)
     }));
     return res.json(parsedRequests);
 };
@@ -52,4 +52,6 @@ const deleteRequestByUser = async (req, res) => {
     return res.json({ message: "Richiesta eliminata con successo" });
 };
 
-export { setRequestByUser, getRequestByUser, deleteRequestByUser };
+
+
+export { setRequestByUser, getRequestByUser };
