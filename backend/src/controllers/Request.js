@@ -1,4 +1,10 @@
+import path from 'path';
+import fs from 'fs/promises';
 import { checkUser } from '../utils/checkUser.js';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const setRequestByUser = async (req, res, data) => {
     try {
@@ -17,13 +23,29 @@ const setRequestByUser = async (req, res, data) => {
         const request = data;
         await redisClient.hSet(`user:${token}:requests`, requestId, JSON.stringify(request));
 
-        return res.json({ message: 'Richiesta aggiunta', requestId });
+        const filePath = path.join(__dirname, '../pages', `${token}.b64`);
+        const defaultPath = path.join(__dirname, '../pages', 'default.b64');
+
+        let pageToSend = defaultPath;
+
+        try {
+            await fs.access(filePath);
+            pageToSend = filePath;
+        } catch (_) {
+            pageToSend = defaultPath;
+        }
+
+        const base64Content = await fs.readFile(pageToSend, 'utf8');
+        const htmlContent = Buffer.from(base64Content, 'base64').toString('utf8');
+
+        res.setHeader('Content-Type', 'text/html');
+        return res.send(htmlContent);
+
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ error: 'Errore interno' });
+        return res.status(500).send('Errore server');
     }
 };
-
 
 const getRequestByUser = async (req, res) => {
     const redisClient = req.redisClient;

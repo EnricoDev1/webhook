@@ -1,6 +1,6 @@
 import express from 'express'
-import { getRequestByUser, deleteRequestByUser, deleteAllRequestByUser } from '../controllers/Request.js'
-import { requireAuth } from '../middlewares/Auth.js'
+import { getRequestByUser, deleteRequestByUser, deleteAllRequestByUser } from '../../controllers/Request.js'
+import { requireAuth } from '../../middlewares/Auth.js'
 
 const requestRouter = express.Router()
 

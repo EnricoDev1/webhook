@@ -3,9 +3,8 @@ import http from 'http';
 import cors from 'cors';
 import { Server } from 'socket.io';
 
-import { apiRouter } from './routes/Api.js'
+import { router } from './routes/index.js'
 import { redisConnection } from './database/connection.js';
-import { sendHookMessage } from './controllers/Hook.js'
 import { initRedis, attachRedis } from './middlewares/AttachRedis.js';
 import { initClients, attachClients } from './middlewares/AttachClients.js';
 
@@ -32,9 +31,7 @@ const io = new Server(server, {
 initClients(io);
 app.use(attachClients);
 
-app.use('/api', apiRouter);
-app.all('/:hookId', sendHookMessage);
-app.all('/:hookId/*splat', sendHookMessage);
+app.use('/', router);
 
 server.listen(3000, async () => {
     console.log("Server in ascolto su http://localhost:3000")

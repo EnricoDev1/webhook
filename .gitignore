@@ -1,3 +1,4 @@
 **/package-lock.json
 **/node_modules
 requests.http
+/backend/src/pages/
