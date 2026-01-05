@@ -36,16 +36,18 @@ export default function RequestList({
           </div>
         ) : (
           <div className="p-3 space-y-2">
-            {requests.map((request) => (
-              <RequestItem
-                key={request.id}
-                request={request}
-                isSelected={selectedRequest?.id === request.id}
-                onSelect={onSelect}
-                onDelete={onDelete}
-                darkMode={darkMode}
-              />
-            ))}
+            {[...requests]
+              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+              .map((request) => (
+                <RequestItem
+                  key={request.id}
+                  request={request}
+                  isSelected={selectedRequest?.id === request.id}
+                  onSelect={onSelect}
+                  onDelete={onDelete}
+                  darkMode={darkMode}
+                />
+              ))}
           </div>
         )}
       </div>

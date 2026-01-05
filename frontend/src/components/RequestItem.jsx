@@ -25,7 +25,6 @@ export default function RequestItem({
     : 'bg-blue-50 border-blue-400 ring-2 ring-blue-300/50';
 
   const textMuted = darkMode ? 'text-gray-400' : 'text-gray-600';
-  console.log(request);
   return (
     <div
       className={`${baseClasses} ${isSelected ? selectedClasses : 'border-transparent'} ${hoverClasses}`}
@@ -34,8 +33,8 @@ export default function RequestItem({
       {/* Top row: Method, Delete */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
-          <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${getMethodColor(request.content.request.method, darkMode)}`}>
-            {request.content.request.method}
+          <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${getMethodColor(request.request.method, darkMode)}`}>
+            {request.request.method}
           </span>
         </div>
 
@@ -59,23 +58,23 @@ export default function RequestItem({
       {/* Details */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <span className={`text-sm ${textMuted}`}>{request.content.request.ip}</span>
+          <span className={`text-sm ${textMuted}`}>{request.request.ip}</span>
         </div>
 
         <div className="truncate">
           <span className={`text-xs ${textMuted} mr-2`}>Path:</span>
           <code className="text-sm font-mono bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded">
-            {request.content.request.path}
+            {request.request.path}
           </code>
         </div>
 
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <Clock className={`h-3.5 w-3.5 ${textMuted}`} />
-            <span className={textMuted}>{formatTimeAgo(request.content.timestamp)}</span>
+            <span className={textMuted}>{formatTimeAgo(request.timestamp)}</span>
           </div>
           <span className={`font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-            {request.content.timestamp}ms
+            {request.timestamp}ms
           </span>
         </div>
       </div>

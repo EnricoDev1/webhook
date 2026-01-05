@@ -47,11 +47,11 @@ export default function RequestDetails({
           <div className="flex flex-wrap items-center gap-6 text-sm">
             <div className={`flex items-center gap-2 ${textMuted}`}>
               <User className="h-4 w-4" />
-              <span>{request.content.client.ip}</span>
+              <span>{request.client.ip}</span>
             </div>
             <div className={`flex items-center gap-2 ${textMuted}`}>
               <Clock className="h-4 w-4" />
-              <span>{new Date(request.content.timestamp).toLocaleString()}</span>
+              <span>{new Date(request.timestamp).toLocaleString()}</span>
             </div>
             <div className={`flex items-center gap-2 ${textMuted}`}>
               <Terminal className="h-4 w-4" />
@@ -97,7 +97,7 @@ export default function RequestDetails({
               Request Headers
             </h3>
             <pre className={`flex-1 ${codeBg} text-sm text-green-400 p-5 rounded-xl overflow-auto border ${darkMode ? 'border-gray-700' : 'border-gray-300'} font-mono`}>
-              {JSON.stringify(request.content.request.headers, null, 2)}
+              {JSON.stringify(request.request.headers, null, 2)}
             </pre>
           </div>
 

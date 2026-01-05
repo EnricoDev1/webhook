@@ -26,11 +26,9 @@ export const useSocket = (onNewRequest) => {
     });
 
     socket.on("new-request", (json) => {
-      console.log(json);
       try {
         let data = JSON.parse(json);
         onNewRequest?.(data);
-        console.log("ok");
       } catch (e) {
         console.error("Error parsing JSON");
       }

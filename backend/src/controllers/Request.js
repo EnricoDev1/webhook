@@ -54,4 +54,4 @@ const deleteRequestByUser = async (req, res) => {
 
 
 
-export { setRequestByUser, getRequestByUser };
+export { setRequestByUser, getRequestByUser, deleteRequestByUser };
