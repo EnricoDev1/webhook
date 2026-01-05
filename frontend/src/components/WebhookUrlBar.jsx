@@ -1,8 +1,7 @@
 import { Globe, Copy } from 'lucide-react';
+import SplashCopyButton from './SplashCopyButton';
 
 export default function WebhookUrlBar({ webhookUrl, darkMode }) {
-  const handleCopy = () => navigator.clipboard.writeText(webhookUrl);
-
   return (
     <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow p-4 mb-6 border ${darkMode ? 'border-gray-700' : 'border-gray-200'} flex justify-between items-center`}>
       <div className="flex items-center">
@@ -12,10 +11,7 @@ export default function WebhookUrlBar({ webhookUrl, darkMode }) {
           {webhookUrl || 'Loading...'}
         </a>
       </div>
-      <button onClick={handleCopy} className="flex items-center px-3 py-1.5 rounded text-sm bg-blue-600 hover:bg-blue-700 text-white transition-colors">
-        <Copy className="h-3.5 w-3.5 mr-1.5" />
-        Copy
-      </button>
+        <SplashCopyButton text={"Copy URL"} darkMode={darkMode}/>
     </div>
   );
 }

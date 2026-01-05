@@ -16,8 +16,8 @@ export default function RequestItem({
     border
   `;
 
-  const hoverClasses = darkMode 
-    ? 'hover:bg-gray-700 hover:border-gray-600' 
+  const hoverClasses = darkMode
+    ? 'hover:bg-gray-700 hover:border-gray-600'
     : 'hover:bg-gray-50 hover:border-gray-300';
 
   const selectedClasses = darkMode
@@ -45,8 +45,8 @@ export default function RequestItem({
           }}
           className={`
             p-2 rounded-lg transition-all opacity-60 hover:opacity-100
-            ${darkMode 
-              ? 'hover:bg-red-900/40 text-red-400' 
+            ${darkMode
+              ? 'hover:bg-red-900/40 text-red-400'
               : 'hover:bg-red-100 text-red-600'}
           `}
           aria-label="Delete request"
@@ -59,6 +59,13 @@ export default function RequestItem({
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <span className={`text-sm ${textMuted}`}>{request.request.ip}</span>
+        </div>
+
+        <div className="truncate flex items-center gap-1">
+          <User className={`h-4 w-4 ${textMuted}`} /> {/* Fixed icon size */}
+          <code className="text-sm font-mono bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded">
+            {request.client.ip}
+          </code>
         </div>
 
         <div className="truncate">
@@ -78,6 +85,7 @@ export default function RequestItem({
           </span>
         </div>
       </div>
+
     </div>
   );
 }

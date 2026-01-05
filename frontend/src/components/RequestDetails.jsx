@@ -1,6 +1,7 @@
 // src/components/RequestDetails/RequestDetails.jsx
-import React from 'react';
-import { Copy, Trash2, XCircle, Clock, User, Globe, Terminal } from 'lucide-react';
+import { useState } from 'react';
+import { Trash2, XCircle, Clock, User, Globe, Terminal } from 'lucide-react';
+import SplashCopyButton from './SplashCopyButton';
 
 export default function RequestDetails({
   request,
@@ -26,8 +27,12 @@ export default function RequestDetails({
   const codeBg = darkMode ? 'bg-gray-900/80' : 'bg-gray-100';
   const buttonHover = darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200';
 
+  const [copied, setCopied] = useState(false);
+
   const handleCopy = () => {
     navigator.clipboard.writeText(JSON.stringify(request, null, 2));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1200);
   };
 
   return (
@@ -37,10 +42,10 @@ export default function RequestDetails({
         <div>
           <div className="flex items-center gap-4 mb-3">
             <span className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider ${darkMode ? 'bg-green-900/50 text-green-300' : 'bg-green-100 text-green-800'}`}>
-              {request.method}
+              {request.request.method}
             </span>
             <code className={`text-lg font-mono ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-              {request.url}
+              {request.request.url}
             </code>
           </div>
 
@@ -61,14 +66,11 @@ export default function RequestDetails({
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            onClick={handleCopy}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
-          >
-            <Copy className="h-4 w-4" />
-            Copy JSON
-          </button>
-
+          <SplashCopyButton 
+          text={"Copy JSON"}
+          darkMode={darkMode}
+          />
+  
           {onDelete && (
             <button
               onClick={() => onDelete(request.id)}
@@ -105,7 +107,7 @@ export default function RequestDetails({
           <div className="flex flex-col">
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <div className="h-5 w-5 rounded bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-xs">
-                {}
+                { }
               </div>
               Request Body
             </h3>
