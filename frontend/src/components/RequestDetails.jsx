@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { Trash2, XCircle, Clock, User, Globe, Terminal } from 'lucide-react';
 import SplashCopyButton from './SplashCopyButton';
+import HeadersPanel from './HeadersPanel'; 
+import BodyPanel from './BodyPanel'; 
 
 export default function RequestDetails({
   request,
@@ -26,14 +28,6 @@ export default function RequestDetails({
   const textMuted = darkMode ? 'text-gray-400' : 'text-gray-600';
   const codeBg = darkMode ? 'bg-gray-900/80' : 'bg-gray-100';
   const buttonHover = darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200';
-
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(JSON.stringify(request, null, 2));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1200);
-  };
 
   return (
     <div className={`h-full flex flex-col ${cardBg} rounded-xl shadow-xl border ${border}`}>
@@ -70,15 +64,6 @@ export default function RequestDetails({
           text={"Copy JSON"}
           darkMode={darkMode}
           />
-  
-          {onDelete && (
-            <button
-              onClick={() => onDelete(request.id)}
-              className="p-2.5 rounded-lg bg-red-900/30 hover:bg-red-900/50 text-red-300 transition-colors"
-            >
-              <Trash2 className="h-5 w-5" />
-            </button>
-          )}
 
           <button
             onClick={onClose}
@@ -91,32 +76,20 @@ export default function RequestDetails({
 
       {/* Main Content - Two Columns */}
       <div className="flex-1 overflow-y-auto p-6">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-          {/* Headers Panel */}
-          <div className="flex flex-col">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Terminal className="h-5 w-5" />
-              Request Headers
-            </h3>
-            <pre className={`flex-1 ${codeBg} text-sm text-green-400 p-5 rounded-xl overflow-auto border ${darkMode ? 'border-gray-700' : 'border-gray-300'} font-mono`}>
-              {JSON.stringify(request.request.headers, null, 2)}
-            </pre>
-          </div>
+        <div className="grid grid-cols-1 gap-8">
+          {/* Headers Panel - stacked as a row above */}
+          <HeadersPanel
+            headers={request.request.headers}
+            darkMode={darkMode}
+            codeBg={codeBg}
+          />
 
-          {/* Body Panel */}
-          <div className="flex flex-col">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <div className="h-5 w-5 rounded bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-xs">
-                { }
-              </div>
-              Request Body
-            </h3>
-            <pre className={`flex-1 ${codeBg} text-sm text-green-400 p-5 rounded-xl overflow-auto border ${darkMode ? 'border-gray-700' : 'border-gray-300'} font-mono`}>
-              {typeof request.body === 'object' && request.body !== null
-                ? JSON.stringify(request.body, null, 2)
-                : request.body || '<empty>'}
-            </pre>
-          </div>
+          {/* Body Panel - stacked below headers */}
+          <BodyPanel
+            body={request.request.body}
+            darkMode={darkMode}
+            codeBg={codeBg}
+          />
         </div>
       </div>
     </div>
