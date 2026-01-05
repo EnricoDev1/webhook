@@ -1,4 +1,5 @@
 **/package-lock.json
 **/node_modules
 requests.http
-/backend/src/pages/
+/backend/src/pages/*
+!/backend/src/pages/default.b64
