@@ -13,6 +13,7 @@ const sendHookMessage = (req, res) => {
     const client = req.clients.get(hookId);
 
     const data = {
+        id: uuid(),
         hookId: hookId,
         timestamp: Date.now(), 
 

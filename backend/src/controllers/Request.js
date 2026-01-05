@@ -13,7 +13,8 @@ const setRequestByUser = async (req, res, data) => {
                 .json({ error: result.error });
         }
 
-        const requestId = uuid();
+        const requestId = data.id;
+        delete data.id;
         const request = data;
         await redisClient.hSet(`user:${token}:requests`, requestId, JSON.stringify(request));
 
