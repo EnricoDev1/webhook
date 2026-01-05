@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
-import { setUser } from './userController.js';
-import { setRequestByUser } from './requestController.js';
+import { setUser } from './User.js';
+import { setRequestByUser } from './Request.js';
 import {getFilesInfo, getSafeBody} from '../utils/requestSanitizer.js';
 
 const createHook = (req, res) => {

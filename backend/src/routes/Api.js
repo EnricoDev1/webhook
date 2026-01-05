@@ -1,11 +1,11 @@
 import express from 'express';
-import dbRouter from './Database.js';
-import hookRouter from './Hook.js';
+import { dbRouter } from './Database.js';
+import { hookRouter } from './Hook.js';
 
-const router = express.Router();
+const apiRouter = express.Router();
 
-router.use('/db', dbRouter);
-router.use('/', hookRouter);
+apiRouter.use('/db', dbRouter);
+apiRouter.use('/', hookRouter);
 
 
-export default router;
+export { apiRouter };

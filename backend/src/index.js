@@ -1,10 +1,13 @@
 import express from 'express';
-import apiRoutes from './routes/Api.js'
-import { redisConnection } from './database/connection.js';
-import {Server} from 'socket.io';
 import http from 'http';
 import cors from 'cors';
-import {sendHookMessage} from './controllers/hookController.js'
+import { Server } from 'socket.io';
+
+import { apiRouter } from './routes/Api.js'
+import { redisConnection } from './database/connection.js';
+import { sendHookMessage } from './controllers/Hook.js'
+import { initRedis, attachRedis } from './middlewares/AttachRedis.js';
+import { initClients, attachClients } from './middlewares/AttachClients.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -15,32 +18,21 @@ app.use(express.urlencoded({ extended: true })); // Parse application/x-www-form
 app.use(express.text()); // Parse text/plain
 app.use(express.raw({ type: 'application/octet-stream' }));
 
+//Redis
+const redisClient = await redisConnection();
+initRedis(redisClient);
+app.use(attachRedis);
+
+//Socket
 const io = new Server(server, {
-    cors : {
+    cors: {
         "origin": "*"
     }
 });
+initClients(io);
+app.use(attachClients);
 
-let redisClient;
-const clients = new Map();
-
-(async () => {
-    redisClient = await redisConnection();
-})();
-
-io.on('connection', (socket) => {
-    const hookId = socket.handshake.query.hookId;
-    clients.set(hookId, socket);
-});
-
-app.use((req, res, next) => {
-    req.io = io;
-    req.clients = clients;
-    req.redisClient = redisClient;
-    next();
-});
-
-app.use('/api', apiRoutes);
+app.use('/api', apiRouter);
 app.all('/:hookId', sendHookMessage);
 app.all('/:hookId/*splat', sendHookMessage);
 
