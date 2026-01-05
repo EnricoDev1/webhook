@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { setUser } from './User.js';
 import { setRequestByUser } from './Request.js';
-import {getFilesInfo, getSafeBody} from '../utils/requestSanitizer.js';
+import { getFilesInfo, getSafeBody, normalizeClient } from '../utils/requestSanitizer.js';
 
 const createHook = (req, res) => {
     const hookId = uuid();
@@ -15,7 +15,7 @@ const sendHookMessage = (req, res) => {
     const data = {
         id: uuid(),
         hookId: hookId,
-        timestamp: Date.now(), 
+        timestamp: Date.now(),
 
         request: {
             method: req.method.toUpperCase(),
@@ -24,7 +24,7 @@ const sendHookMessage = (req, res) => {
             baseUrl: req.baseUrl,
             hostname: req.hostname,
             protocol: req.protocol,
-            
+
             headers: req.headers,
 
             query: req.query,
@@ -35,15 +35,12 @@ const sendHookMessage = (req, res) => {
             files: getFilesInfo(req.files),
         },
 
-        client: {
-            ip: req.ip || req.connection.remoteAddress || req.socket.remoteAddress,
-            ips: req.ips,
-        },
+        client: normalizeClient(req),
     };
-    
-    if(client) {
+
+    if (client) {
         client.emit("new-request", JSON.stringify(data));
-    } 
+    }
     setRequestByUser(req, res, data)
 };
 

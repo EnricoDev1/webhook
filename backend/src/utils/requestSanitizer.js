@@ -1,23 +1,20 @@
-function getSafeBody(body, contentType) {
+function getSafeBody(body) {
     if (!body || Object.keys(body).length === 0) {
         return null;
     }
 
-    // For JSON, form-data (without files), urlencoded
     if (typeof body === 'object' && !Buffer.isBuffer(body)) {
         try {
-            return JSON.parse(JSON.stringify(body)); // Deep clone to remove circular refs
+            return JSON.parse(JSON.stringify(body));
         } catch {
             return { _note: '[Body could not be serialized]' };
         }
     }
 
-    // Raw text or other text-based
     if (typeof body === 'string') {
         return body.length > 10000 ? body.substring(0, 10000) + '\n\n... [truncated]' : body;
     }
 
-    // Binary body (e.g., application/octet-stream)
     if (Buffer.isBuffer(body)) {
         return {
             _type: 'binary',
@@ -43,8 +40,6 @@ function getFilesInfo(files) {
         mimetype: file.mimetype,
         size: file.size,
         truncated: file.truncated || false,
-        // Do NOT send full buffer in real-time emit (too heavy for WebSocket)
-        // buffer: file.buffer?.length > 1000 ? '[large file]' : file.buffer,
         preview: file.buffer
             ? file.buffer.toString('base64').substring(0, 200) + (file.buffer.length > 100 ? '...' : '')
             : null,
@@ -54,11 +49,50 @@ function getFilesInfo(files) {
         return files.map(formatFile);
     }
 
-    // Object format (e.g., req.files['avatar'], req.files['photos'][] )
     return Object.keys(files).reduce((acc, field) => {
         acc[field] = Array.isArray(files[field]) ? files[field].map(formatFile) : formatFile(files[field]);
         return acc;
     }, {});
 }
 
-export { getSafeBody, getFilesInfo }
+function normalizeClient(req) {
+    if (!req) {
+        return null;
+    }
+
+    const normalizeIp = (ip) => {
+        if (!ip || typeof ip !== 'string') {
+            return null;
+        }
+
+        if (ip.startsWith('::ffff:')) {
+            return ip.slice(7);
+        }
+
+        if (ip === '::1') {
+            return '127.0.0.1';
+        }
+
+        return ip;
+    };
+
+    const ip =
+        normalizeIp(req.ip) ||
+        normalizeIp(req.connection?.remoteAddress) ||
+        normalizeIp(req.socket?.remoteAddress);
+
+    const ips = Array.isArray(req.ips)
+        ? req.ips.map(normalizeIp).filter(Boolean)
+        : [];
+
+    if (!ip && ips.length === 0) {
+        return null;
+    }
+
+    return {
+        ip,
+        ips,
+    };
+}
+
+export { getSafeBody, getFilesInfo, normalizeClient }

@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import { checkUser } from '../utils/checkUser.js';
 
 const setRequestByUser = async (req, res, data) => {
@@ -52,6 +51,21 @@ const deleteRequestByUser = async (req, res) => {
     return res.json({ message: "Richiesta eliminata con successo" });
 };
 
+const deleteAllRequestByUser = async (req, res) => {
+    try {
+        const redisClient = req.redisClient;
+        const token = req.headers.authorization;
+        const deleted = await redisClient.del(`user:${token}:requests`);
 
+        if (deleted === 0) {
+            return res.status(404).json({ error: "Nessuna richiesta da eliminare" });
+        }
 
-export { setRequestByUser, getRequestByUser, deleteRequestByUser };
+        return res.json({ message: "Tutte le richieste eliminate con successo" });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Errore interno" });
+    }
+};
+
+export { setRequestByUser, getRequestByUser, deleteRequestByUser, deleteAllRequestByUser };
