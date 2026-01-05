@@ -15,15 +15,14 @@ function App() {
     requests,
     selectedRequest,
     setSelectedRequest,
-    remove,           // delete function
-    addRequest        // to handle incoming socket requests
+    addRequest,
+    remove,
   } = useRequests();
 
   // Handle new incoming webhook via Socket.io
   const handleNewRequest = useCallback((newRequest) => {
     addRequest(newRequest);
-    // Optional: auto-select the newest request
-    // setSelectedRequest(newRequest);
+    setSelectedRequest(newRequest);
   }, [addRequest]);
 
   // Connect socket and listen for new requests

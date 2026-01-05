@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 
-export const useSocket = () => {
+export const useSocket = (onNewRequest) => {
   const socketRef = useRef(null);
 
   useEffect(() => {
@@ -25,8 +25,15 @@ export const useSocket = () => {
       console.error('Socket connection error:', err.message);
     });
 
-    socket.on("new-request", (data) => {
-      console.log(data);
+    socket.on("new-request", (json) => {
+      console.log(json);
+      try {
+        let data = JSON.parse(json);
+        onNewRequest?.(data);
+        console.log("ok");
+      } catch (e) {
+        console.error("Error parsing JSON");
+      }
     });
 
     // Cleanup on unmount
@@ -34,6 +41,6 @@ export const useSocket = () => {
       socket.disconnect();
       socketRef.current = null;
     };
-  }, []); 
+  }, [onNewRequest]);
 
 };

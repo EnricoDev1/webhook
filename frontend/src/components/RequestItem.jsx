@@ -26,7 +26,6 @@ export default function RequestItem({
 
   const textMuted = darkMode ? 'text-gray-400' : 'text-gray-600';
   console.log(request);
-
   return (
     <div
       className={`${baseClasses} ${isSelected ? selectedClasses : 'border-transparent'} ${hoverClasses}`}

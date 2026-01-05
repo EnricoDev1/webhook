@@ -23,5 +23,9 @@ export function useRequests() {
     if (selectedRequest?.id === id) setSelectedRequest(null);
   };
 
-  return { requests, selectedRequest, setSelectedRequest, remove };
+  const addRequest = (request) => {
+    requests.push(request);
+  }
+
+  return { requests, selectedRequest, setSelectedRequest, addRequest, remove };
 }
