@@ -4,6 +4,7 @@ import { BASE_URL } from '../config';
 export const useWebhook = () => {
   const [webhookUrl, setWebhookUrl] = useState('');
   const [loading, setLoading] = useState(true);
+  const [hookId, setHookId] = useState('');
 
   const getHookId = async () => {
     const response = await fetch('/api/hookId', {
@@ -17,16 +18,19 @@ export const useWebhook = () => {
 
   useEffect(() => {
     const generateWebhookUrl = async () => {
-      let hookId = localStorage.getItem('hookId');
-      if (!hookId) {
-        hookId = await getHookId();
-        if (hookId) localStorage.setItem('hookId', hookId);
+      let id = localStorage.getItem('hookId');
+      
+      if (!id) {
+        id = await getHookId();
+        if (id) localStorage.setItem('hookId', id);
       }
-      if (hookId) setWebhookUrl(`${BASE_URL}/${hookId}`);
+      if (id) setWebhookUrl(`${BASE_URL}/${id}`);
+      
+      setHookId(id);
       setLoading(false);
     };
     generateWebhookUrl();
   }, []);
 
-  return { webhookUrl, loading };
+  return { hookId, webhookUrl, loading };
 };
