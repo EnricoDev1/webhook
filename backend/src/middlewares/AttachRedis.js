@@ -9,4 +9,4 @@ function attachRedis(req, res, next) {
     next();
 }
 
-export { initRedis, attachRedis };
+export { initRedis, attachRedis, redisClient };

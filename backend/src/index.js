@@ -7,6 +7,7 @@ import { router } from './routes/index.js'
 import { redisConnection } from './database/connection.js';
 import { initRedis, attachRedis } from './middlewares/AttachRedis.js';
 import { initClients, attachClients } from './middlewares/AttachClients.js';
+import { cleanUp } from './utils/cleanUp.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -30,9 +31,8 @@ const io = new Server(server, {
 });
 initClients(io);
 app.use(attachClients);
-
 app.use('/', router);
-
+cleanUp();
 server.listen(3000, async () => {
     console.log("Server in ascolto su http://localhost:3000")
 });
