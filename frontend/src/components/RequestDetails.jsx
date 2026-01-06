@@ -4,6 +4,7 @@ import { Trash2, XCircle, Clock, User, Globe, Terminal } from 'lucide-react';
 import SplashCopyButton from './SplashCopyButton';
 import HeadersPanel from './HeadersPanel'; 
 import BodyPanel from './BodyPanel'; 
+import QueryParamsPanel from './QueryParams';
 
 export default function RequestDetails({
   request,
@@ -11,6 +12,7 @@ export default function RequestDetails({
   onDelete,
   darkMode,
 }) {
+  console.log(request);
   if (!request) {
     return (
       <div className={`h-full flex flex-col items-center justify-center rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-gray-50'} px-8`}>
@@ -77,19 +79,24 @@ export default function RequestDetails({
       {/* Main Content - Two Columns */}
       <div className="flex-1 overflow-y-auto p-6">
         <div className="grid grid-cols-1 gap-8">
-          {/* Headers Panel - stacked as a row above */}
           <HeadersPanel
             headers={request.request.headers}
             darkMode={darkMode}
             codeBg={codeBg}
           />
 
-          {/* Body Panel - stacked below headers */}
           <BodyPanel
             body={request.request.body}
             darkMode={darkMode}
             codeBg={codeBg}
           />
+
+          <QueryParamsPanel
+            queryParams={request.request.query}
+            darkMode={darkMode}
+            codeBg={codeBg}
+          />
+          
         </div>
       </div>
     </div>

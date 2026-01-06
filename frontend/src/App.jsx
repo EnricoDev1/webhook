@@ -17,6 +17,7 @@ function App() {
     setSelectedRequest,
     addRequest,
     remove,
+    deleteAllRequests
   } = useRequests();
 
   // Handle new incoming webhook via Socket.io
@@ -54,7 +55,8 @@ function App() {
               selectedRequest={selectedRequest}
               onSelect={setSelectedRequest}
               onDelete={remove}
-              darkMode={darkMode}  // ← Pass boolean directly, NOT a string!
+              darkMode={darkMode}
+              onDeleteAll={deleteAllRequests}
             />
           </div>
 

@@ -1,7 +1,6 @@
 export const getHookId = async () => {
-  const res = await fetch('http://localhost/api/hookId', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  const res = await fetch('/api/hookId', {
+    method: 'POST'
   });
   if (!res.ok) throw new Error('Failed to get hookId');
   const data = await res.json();
@@ -9,10 +8,9 @@ export const getHookId = async () => {
 };
 
 export const fetchRequests = async (token) => {
-  const res = await fetch('http://localhost/api/db/request', {
+  const res = await fetch('/api/db/request', {
     headers: {
-      'Authorization': `${token}`,
-      'Content-Type': 'application/json',
+      'Authorization': `${token}`
     },
   });
   if (!res.ok) throw new Error('Failed to fetch requests');
@@ -20,12 +18,21 @@ export const fetchRequests = async (token) => {
 };
 
 export const deleteRequest = async (id, token) => {
-  const res = await fetch(`http://localhost/api/db/request/${id}`, {
+  const res = await fetch(`/api/db/request/${id}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `${token}`,
-      'Content-Type': 'application/json',
     },
   });
   if (!res.ok) throw new Error('Failed to delete request');
 };
+
+export const deleteRequests = async (token) => {
+  const res = await fetch(`/api/db/request`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': token
+    }
+  });
+  if (!res.ok) throw new Error('Failed to delete reqeusts');
+}

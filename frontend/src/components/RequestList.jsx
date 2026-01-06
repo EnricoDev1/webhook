@@ -1,4 +1,3 @@
-// src/components/RequestList/RequestList.jsx
 import RequestItem from './RequestItem';
 
 export default function RequestList({
@@ -6,17 +5,31 @@ export default function RequestList({
   selectedRequest,
   onSelect,
   onDelete,
+  onDeleteAll,
   darkMode,
 }) {
   const containerBg = darkMode ? 'bg-gray-800' : 'bg-white';
   const border = darkMode ? 'border-gray-700' : 'border-gray-200';
   const headerBg = darkMode ? 'bg-gray-750' : 'bg-gray-50';
+  const buttonText = darkMode ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-700';
+  const buttonBg = darkMode ? 'hover:bg-red-900/30' : 'hover:bg-red-50';
 
   return (
     <div className={`h-full flex flex-col ${containerBg} rounded-xl shadow-lg border ${border}`}>
       {/* Header */}
       <div className={`px-5 py-4 border-b ${border} ${headerBg} rounded-t-xl`}>
-        <h3 className="font-semibold text-lg">Recent Requests</h3>
+        <div className="flex justify-between items-center">
+          <h3 className="font-semibold text-lg">Recent Requests</h3>
+          {requests.length > 0 && (
+            <button
+              onClick={onDeleteAll}
+              className={`px-3 py-1 text-sm font-medium rounded-lg transition-colors ${buttonText} ${buttonBg} focus:outline-none focus:ring-2 focus:ring-red-500/50`}
+              aria-label="Delete all requests"
+            >
+              Delete All
+            </button>
+          )}
+        </div>
         <p className={`text-sm mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
           {requests.length} {requests.length === 1 ? 'request' : 'requests'}
         </p>
