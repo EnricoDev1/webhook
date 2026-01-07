@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Copy } from 'lucide-react';
 
-export default function SplashCopyButton({text, darkMode}) {
+export default function SplashCopyButton({text, dataToCopy, darkMode}) {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
         setCopied(true);
-        // Simulate copying to clipboard
-        navigator.clipboard.writeText(JSON.stringify({ example: 'data' }));
+        navigator.clipboard.writeText(dataToCopy);
         setTimeout(() => setCopied(false), 2000);
     };
 

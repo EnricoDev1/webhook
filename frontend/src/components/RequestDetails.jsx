@@ -64,6 +64,7 @@ export default function RequestDetails({
         <div className="flex items-center gap-3">
           <SplashCopyButton 
           text={"Copy JSON"}
+          dataToCopy={JSON.stringify(request.request)}
           darkMode={darkMode}
           />
 

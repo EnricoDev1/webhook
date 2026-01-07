@@ -11,7 +11,7 @@ export default function WebhookUrlBar({ webhookUrl, darkMode }) {
           {webhookUrl || 'Loading...'}
         </a>
       </div>
-        <SplashCopyButton text={"Copy URL"} darkMode={darkMode}/>
+        <SplashCopyButton text={"Copy URL"} dataToCopy={webhookUrl} darkMode={darkMode}/>
     </div>
   );
 }
