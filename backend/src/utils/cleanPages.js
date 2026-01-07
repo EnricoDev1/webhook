@@ -8,12 +8,12 @@ const __dirname = path.dirname(__filename);
 export async function cleanPages(hookId) {
     try {
         const pagesDir = path.join(__dirname, '../pages');
-        const filePath = path.join(pagesDir, `${hookId}.b64`);
+        const filePath = path.join(pagesDir, `${hookId}.page`);
         await fs.unlink(filePath);
-        console.log(`[cleanPages] File ${hookId}.b64 deleted`);
+        console.log(`[cleanPages] File ${hookId}.page deleted`);
     } catch (error) {
         if (error.code !== 'ENOENT') {
-            console.error(`Errore eliminando il file ${hookId}.b64:`, error);
+            console.error(`Errore eliminando il file ${hookId}.page:`, error);
         }
     }
 }

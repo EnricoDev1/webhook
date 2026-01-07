@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { setUser } from './User.js';
 import { setRequestByUser } from './Request.js';
 import { getFilesInfo, getSafeBody, normalizeClient } from '../utils/requestSanitizer.js';
+import { isBase64, isValidContentType, isValidStatusCode } from '../utils/pageValidation.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,24 +53,27 @@ const sendHookMessage = (req, res) => {
 
 const createPage = async (req, res) => {
     try {
+        const { statusCode, contentType, content } = req.body;
+
+        const sc = isValidStatusCode(statusCode) ? statusCode : 200;
+        const ct = isValidContentType(contentType) ? contentType : 'text/html';
+
+        if (!isBase64(content))
+            return res.status(400).json({ error: 'Base64 non valido' });
+
         const hookId = req.headers.authorization;
-        const content = req.body;
+        const body = Buffer.from(content, 'base64').toString('utf8');
 
-        if (!content || typeof content !== 'string') {
-            return res.status(400).json({ error: 'File non valido' });
-        }
+        const fileData = `${sc}\n${ct}\n\n${body}`;
+        await fs.writeFile(path.join(__dirname, '../pages', `${hookId}.page`), fileData, 'utf8');
 
-        const pagesDir = path.join(__dirname, '../pages');
-        const filePath = path.join(pagesDir, `${hookId}.b64`);
-
-        await fs.writeFile(filePath, content, 'utf8');
-
-        return res.json({ message: 'Pagina salvata' });
-
+        res.json({ message: 'Pagina salvata' });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ error: 'Errore salvataggio pagina' });
+        res.status(500).json({ error: 'Errore salvataggio pagina' });
     }
 };
+
+
 
 export { createHook, sendHookMessage, createPage };

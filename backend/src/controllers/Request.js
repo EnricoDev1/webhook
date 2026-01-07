@@ -23,8 +23,8 @@ const setRequestByUser = async (req, res, data) => {
         const request = data;
         await redisClient.hSet(`user:${token}:requests`, requestId, JSON.stringify(request));
 
-        const filePath = path.join(__dirname, '../pages', `${token}.b64`);
-        const defaultPath = path.join(__dirname, '../pages', 'default.b64');
+        const filePath = path.join(__dirname, '../pages', `${token}.page`);
+        const defaultPath = path.join(__dirname, '../pages', 'default.page');
 
         let pageToSend = defaultPath;
 
@@ -34,12 +34,17 @@ const setRequestByUser = async (req, res, data) => {
         } catch (_) {
             pageToSend = defaultPath;
         }
+        const raw = await fs.readFile(pageToSend, 'utf8');
 
-        const base64Content = await fs.readFile(pageToSend, 'utf8');
-        const htmlContent = Buffer.from(base64Content, 'base64').toString('utf8');
+        const [statusLine, contentTypeLine, , ...bodyLines] = raw.split("\n");
 
-        res.setHeader('Content-Type', 'text/html');
-        return res.send(htmlContent);
+        const statusCode = parseInt(statusLine, 10);
+        const contentType = contentTypeLine;
+        const body = bodyLines.join('\n');
+
+        res.status(statusCode);
+        res.set('Content-Type', contentType);
+        res.send(body);
 
     } catch (err) {
         console.error(err);
