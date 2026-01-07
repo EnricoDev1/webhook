@@ -1,7 +1,7 @@
-import { disconnected } from "../middlewares/AttachClients.js";
-import { cleanClients } from "./cleanClients.js";
-import { cleanDb } from "./cleanDb.js";
-import { cleanPages } from "./cleanPages.js";
+import { disconnected } from "../../middlewares/AttachClients.js";
+import { cleanClients } from "./clients.js";
+import { cleanDb } from "./database.js";
+import { cleanPages } from "./pages.js";
 const CLEANUP_INTERVAL = parseInt(process.env.CLEANUP_INTERVAL, 10)
 const TTL = parseInt(process.env.TTL, 10)
 

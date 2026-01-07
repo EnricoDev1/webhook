@@ -7,7 +7,7 @@ import { router } from './routes/index.js'
 import { redisConnection } from './database/connection.js';
 import { initRedis, attachRedis } from './middlewares/AttachRedis.js';
 import { initClients, attachClients } from './middlewares/AttachClients.js';
-import { cleanUp } from './utils/cleanUp.js';
+import { cleanUp } from './utils/cleanFunctions/cleanUp.js';
 
 const app = express();
 const server = http.createServer(app);

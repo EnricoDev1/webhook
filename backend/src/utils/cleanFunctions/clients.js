@@ -1,4 +1,4 @@
-import { clients } from "../middlewares/AttachClients.js";
+import { clients } from "../../middlewares/AttachClients.js";
 
 export function cleanClients(hookId) {
     const removed = clients.delete(hookId);

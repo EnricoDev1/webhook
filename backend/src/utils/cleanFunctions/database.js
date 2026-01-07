@@ -1,4 +1,4 @@
-import { redisClient } from "../middlewares/AttachRedis.js";
+import { redisClient } from "../../middlewares/AttachRedis.js";
 
 export async function cleanDb(token) {
     try {
