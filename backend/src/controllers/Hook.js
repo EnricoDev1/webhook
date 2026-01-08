@@ -61,24 +61,22 @@ const createPage = async (req, res) => {
         if (!isBase64(content))
             return res.status(400).json({ error: 'Base64 non valido' });
 
-        const hookId = req.headers.authorization;
         const body = Buffer.from(content, 'base64').toString('utf8');
 
         const fileData = `${sc}\n${ct}\n\n${body}`;
-        await fs.writeFile(path.join(__dirname, '../pages', `${hookId}.page`), fileData, 'utf8');
+        await fs.writeFile(path.join(__dirname, '../pages', `${req.userToken}.page`), fileData, 'utf8');
 
-        res.json({ message: 'Pagina salvata' });
+        res.json({ message: 'Page saved' });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Errore salvataggio pagina' });
+        res.status(500).json({ error: 'Error saving page' });
     }
 };
 
 const getPage = async (req, res) => {
     try {
-        const hookId = req.headers.authorization;
         const pagesDir = path.join(__dirname, '../pages');
-        let filePath = path.join(pagesDir, `${hookId}.page`);
+        let filePath = path.join(pagesDir, `${req.userToken}.page`);
         let data;
         try {
             data = await fs.readFile(filePath, 'utf8');
@@ -87,7 +85,7 @@ const getPage = async (req, res) => {
                 filePath = path.join(pagesDir, 'default.page');
                 data = await fs.readFile(filePath, 'utf8');
             } catch {
-                return res.status(404).json({ error: 'Pagina non trovata' });
+                return res.status(404).json({ error: 'Page not found' });
             }
         }
 
@@ -96,7 +94,7 @@ const getPage = async (req, res) => {
         const statusCode = parseInt(statusLine, 10);
         const contentType = contentTypeLine;
         const body = bodyLines.join('\n');
-
+ 
         const content = Buffer.from(body, 'utf8').toString('base64');
 
         res.json({
@@ -106,7 +104,7 @@ const getPage = async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Errore lettura pagina' });
+        res.status(500).json({ error: 'Error reading page content' });
     }
 };
 

@@ -11,10 +11,9 @@ const setRequestByUser = async (req, res, data) => {
         const redisClient = req.redisClient;
         const token = data.hookId;
 
-        // Controllo utente con funzione riutilizzabile
         const result = await checkUser(redisClient, token);
         if (!result.ok) {
-            return res.status(result.error === 'Token mancante' ? 401 : 404)
+            return res.status(result.error === 'Missing token' ? 401 : 404)
                 .json({ error: result.error });
         }
 
@@ -48,14 +47,13 @@ const setRequestByUser = async (req, res, data) => {
 
     } catch (err) {
         console.error(err);
-        return res.status(500).send('Errore server');
+        return res.status(500).send('Server error');
     }
 };
 
 const getRequestByUser = async (req, res) => {
     const redisClient = req.redisClient;
-    const token = req.headers.authorization;
-    const requests = await redisClient.hGetAll(`user:${token}:requests`);
+    const requests = await redisClient.hGetAll(`user:${req.userToken}:requests`);
 
     const parsedRequests = Object.entries(requests).map(([id, data]) => ({
         id,
@@ -67,31 +65,29 @@ const getRequestByUser = async (req, res) => {
 const deleteRequestByUser = async (req, res) => {
     const redisClient = req.redisClient;
     const requestId = req.params.id;
-    const token = req.headers.authorization;
 
-    if (!requestId) return res.status(400).json({ error: "Parametri mancanti: requestId" });
+    if (!requestId) return res.status(400).json({ error: "Missing parameters: requestId" });
 
-    const deleted = await redisClient.hDel(`user:${token}:requests`, requestId);
+    const deleted = await redisClient.hDel(`user:${req.userToken}:requests`, requestId);
 
-    if (deleted === 0) return res.status(404).json({ error: "Richiesta non trovata" });
+    if (deleted === 0) return res.status(404).json({ error: "Request not found" });
 
-    return res.json({ message: "Richiesta eliminata con successo" });
+    return res.json({ message: "Succesfully deleted request" });
 };
 
 const deleteAllRequestByUser = async (req, res) => {
     try {
         const redisClient = req.redisClient;
-        const token = req.headers.authorization;
-        const deleted = await redisClient.del(`user:${token}:requests`);
+        const deleted = await redisClient.del(`user:${req.userToken}:requests`);
 
         if (deleted === 0) {
-            return res.status(404).json({ error: "Nessuna richiesta da eliminare" });
+            return res.status(404).json({ error: "No requests to delete" });
         }
 
-        return res.json({ message: "Tutte le richieste eliminate con successo" });
+        return res.json({ message: "Successfully deleted all requests" });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ error: "Errore interno" });
+        return res.status(500).json({ error: "Internal error" });
     }
 };
 

@@ -1,14 +1,14 @@
 const setUser = async (req, res, hookId) => {
     const redisClient = req.redisClient;
     if (!hookId) {
-        return res.status(400).json({ error: "Parametri mancanti: id" });
+        return res.status(400).json({ error: "Missing parameters: id" });
     }
     const added = await redisClient.sAdd('users:set', hookId);
 
     if (added === 1) {
         return res.json({ id: hookId });
     } else {
-        return res.status(400).json({ error: 'Utente già presente' });
+        return res.status(400).json({ error: 'User already logged' });
     }
 };
 
@@ -17,7 +17,7 @@ const getUser = async (req, res) => {
     const { id: userId } = req.params;
 
     const exists = await redisClient.sIsMember('users:set', userId);
-    if (!exists) return res.status(404).json({ error: 'Utente non trovato' });
+    if (!exists) return res.status(404).json({ error: 'User not found' });
 
     res.json({ id: userId });
 };
