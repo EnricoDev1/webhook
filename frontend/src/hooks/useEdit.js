@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { fetchUserPage, updateUserPage } from '../services/api';
-import consola from 'consola';
 
 export function useEdit() {
     const [content, setContent] = useState("");
@@ -10,8 +9,10 @@ export function useEdit() {
         const load = async () => {
             const token = localStorage.getItem('hookId');
             try {
-                // const data = await fetchUserPage(token);
-                // setContent(data);
+                const data = await fetchUserPage(token);
+                setContent(data);
+                console.log(content);
+                console.log(data);
             } catch(e) {
                 setError(e);
             }

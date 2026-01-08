@@ -38,17 +38,19 @@ export const deleteRequests = async (token) => {
 }
 
 export const fetchUserPage = async (token) => {
-  const res = await fetch(`/api/db/page`, {
+  const res = await fetch(`/api/page`, {
     method: 'GET', 
     headers: {
       'Authorization': token
     }
   });
   if (!res.ok) throw new Error('Failed to retrieve user page');
+
+  return res.json();
 }
 
 export const updateUserPage = async (token, content) => {
-  const res = await fetch(`/api/db/page`, {
+  const res = await fetch(`/api/page`, {
     method: 'POST', 
     headers: {
       'Authorization': token,

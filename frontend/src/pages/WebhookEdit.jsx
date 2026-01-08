@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ErrorToast from '../components/ErrorToast';
 import { useEdit } from '../hooks/useEdit';
 
 function WebhookView() {
     const [darkMode] = useState(true);
-    const [contentType, setContentType] = useState('text/html');
-    const [responseBody, setResponseBody] = useState('<h1>Hello World!</h1>');
-    const [statusCode, setStatusCode] = useState('200'); // valore di default per evitare undefined
     const [errors, setErrors] = useState([]);
-    const [isSaving, setIsSaving] = useState(false); // stato per il loading
+    const [isSaving, setIsSaving] = useState(false);
+
+    // Stati locali per i campi modificabili
+    const [statusCode, setStatusCode] = useState('200');
+    const [contentType, setContentType] = useState('text/html');
+    const [responseBody, setResponseBody] = useState(''); // questo è il testo decodificato
+
+    const { content, error, updateContent } = useEdit();
 
     const bgClass = darkMode ? 'bg-gray-900' : 'bg-gray-50';
     const textClass = darkMode ? 'text-gray-100' : 'text-gray-900';
@@ -20,25 +24,48 @@ function WebhookView() {
         setErrors(prev => [...prev, { id, message: msg }]);
     };
 
-    const {
-        content, 
-        error,
-        updateContent
-    } = useEdit();
+    // Quando i dati vengono caricati dal hook (content), aggiorna gli stati locali
+    useEffect(() => {
+        if (content) {
+            setStatusCode(content.statusCode?.toString() || '200');
+            setContentType(content.contentType || 'text/html');
+
+            // Decodifica il contenuto base64 (se presente)
+            if (content.content) {
+                try {
+                    const decoded = atob(content.content);
+                    setResponseBody(decoded);
+                } catch (e) {
+                    setResponseBody(content.content); // fallback se non è base64
+                    addError('Failed to decode response body (not base64?)');
+                }
+            } else {
+                setResponseBody('');
+            }
+        }
+    }, [content]);
+
+    // Gestione errore dal hook
+    useEffect(() => {
+        if (error) {
+            addError(error.message || 'Failed to load webhook configuration');
+        }
+    }, [error]);
 
     const handleSave = async () => {
         setIsSaving(true);
         try {
             const payload = {
                 statusCode: parseInt(statusCode, 10),
-                contentType,
-                responseBody,
+                contentType: contentType,
+                content: btoa(responseBody) // codifica in base64 prima di inviare
             };
-            console.log(payload);
-            await updateContent(payload);
 
+            await updateContent(payload);
+            // Opzionale: toast di successo
+            // addError('Configuration saved successfully!');
         } catch (err) {
-            addError(err + 'Failed to save configuration');
+            addError(err.message || 'Failed to save configuration');
         } finally {
             setIsSaving(false);
         }
@@ -60,7 +87,6 @@ function WebhookView() {
             </header>
 
             <main className="max-w-7xl mx-auto px-4 py-8">
-                {/* Configuration Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Status Code */}
                     <div className={`rounded-lg ${cardBg} border ${borderClass} p-6 shadow-md`}>
@@ -84,7 +110,7 @@ function WebhookView() {
                             <option value="503">503 Service Unavailable</option>
                         </select>
                         <p className="text-sm text-gray-500 mt-3">
-                            Current: <span className="font-mono font-semibold">{statusCode || '200'}</span>
+                            Current: <span className="font-mono font-semibold">{statusCode}</span>
                         </p>
                     </div>
 
@@ -113,7 +139,7 @@ function WebhookView() {
                     />
                     <div className="flex items-center justify-between mt-4">
                         <div className="text-sm text-gray-500">
-                            Content-Type: <span className="font-mono">{contentType}</span>
+                            Content-Type: <span className="font-mono">{contentType || 'text/html'}</span>
                         </div>
                         <button
                             onClick={handleSave}
