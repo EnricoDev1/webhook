@@ -1,12 +1,12 @@
 const checkUser = async (redisClient, token) => {
     if (!token) {
-        return { ok: false, error: 'Token mancante' };
+        return { ok: false, error: 'Missing token' };
     }
 
     const exists = await redisClient.sIsMember('users:set', token);
 
     if (!exists) {
-        return { ok: false, error: 'Utente non trovato' };
+        return { ok: false, error: 'User not found' };
     }
 
     return { ok: true };

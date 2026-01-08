@@ -14,8 +14,8 @@ const server = http.createServer(app);
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Parse application/x-www-form-urlencoded
-app.use(express.text()); // Parse text/plain
+app.use(express.urlencoded({ extended: true }));
+app.use(express.text());
 app.use(express.raw({ type: 'application/octet-stream' }));
 
 //Redis
@@ -34,5 +34,5 @@ app.use(attachClients);
 app.use('/', router);
 cleanUp();
 server.listen(3000, async () => {
-    console.log("Server in ascolto su http://localhost:3000")
+    console.log("Server in ascolto su http://localhost")
 });

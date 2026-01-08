@@ -6,6 +6,6 @@ export async function cleanDb(token) {
         await redisClient.sRem('users:set', token);
         console.log(`[cleanDb] Redis data for ${token} cleaned`);
     } catch (error) {
-        console.error(`Errore eliminando l'utente ${token} da Redis:`, error);
+        console.error(`Error deleting user ${token} from Redis:`, error);
     }
 }

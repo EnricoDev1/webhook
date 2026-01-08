@@ -1,7 +1,7 @@
 let io;
 const clients = new Map();
 const disconnected = new Map();
-// inizializza io e clients
+
 function initClients(socketServer) {
     io = socketServer;
 
@@ -15,7 +15,6 @@ function initClients(socketServer) {
     });
 }
 
-// middleware per allegare io e clients a req
 function attachClients(req, res, next) {
     req.io = io;
     req.clients = clients;

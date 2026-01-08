@@ -13,7 +13,7 @@ export async function cleanPages(hookId) {
         console.log(`[cleanPages] File ${hookId}.page deleted`);
     } catch (error) {
         if (error.code !== 'ENOENT') {
-            console.error(`Errore eliminando il file ${hookId}.page:`, error);
+            console.error(`Error deleting file ${hookId}.page:`, error);
         }
     }
 }

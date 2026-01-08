@@ -8,7 +8,7 @@ const requireAuth = async (req, res, next) => {
         const result = await checkUser(redisClient, token);
 
         if (!result.ok) {
-            return res.status(result.error === 'Token mancante' ? 401 : 404)
+            return res.status(result.error === 'Missing token' ? 401 : 404)
                 .json({ error: result.error });
         }
 
@@ -17,7 +17,7 @@ const requireAuth = async (req, res, next) => {
         next();
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ error: 'Errore interno' });
+        return res.status(500).json({ error: 'Internal error' });
     }
 };
 
