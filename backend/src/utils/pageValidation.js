@@ -15,7 +15,12 @@ const isValidStatusCode = (code) => {
 
 const isValidContentType = (type) => {
     if (typeof type !== 'string') return false;
-    return Boolean(mime.contentType(type));
+
+    if (!/^[\w.+-]+\/[\w.+-]+$/.test(type)) return false;
+
+    if (!mime.extension(type)) return false;
+
+    return true;
 };
 
 export { isBase64, isValidStatusCode, isValidContentType }
