@@ -6,8 +6,9 @@ function WebhookView() {
     const [darkMode] = useState(true);
     const [contentType, setContentType] = useState('text/html');
     const [responseBody, setResponseBody] = useState('<h1>Hello World!</h1>');
-    const [statusCode, setStatusCode] = useState();
+    const [statusCode, setStatusCode] = useState('200'); // valore di default per evitare undefined
     const [errors, setErrors] = useState([]);
+    const [isSaving, setIsSaving] = useState(false); // stato per il loading
 
     const bgClass = darkMode ? 'bg-gray-900' : 'bg-gray-50';
     const textClass = darkMode ? 'text-gray-100' : 'text-gray-900';
@@ -25,9 +26,26 @@ function WebhookView() {
         updateContent
     } = useEdit();
 
+    const handleSave = async () => {
+        setIsSaving(true);
+        try {
+            const payload = {
+                statusCode: parseInt(statusCode, 10),
+                contentType,
+                responseBody,
+            };
+            console.log(payload);
+            await updateContent(payload);
+
+        } catch (err) {
+            addError(err + 'Failed to save configuration');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     return (
         <div className={`min-h-screen ${bgClass} ${textClass} transition-colors duration-200`}>
-            {/* Error Toasts */}
             {errors.map(err => (
                 <ErrorToast
                     key={err.id}
@@ -66,7 +84,7 @@ function WebhookView() {
                             <option value="503">503 Service Unavailable</option>
                         </select>
                         <p className="text-sm text-gray-500 mt-3">
-                            Current: <span className="font-mono font-semibold">{statusCode}</span>
+                            Current: <span className="font-mono font-semibold">{statusCode || '200'}</span>
                         </p>
                     </div>
 
@@ -97,8 +115,16 @@ function WebhookView() {
                         <div className="text-sm text-gray-500">
                             Content-Type: <span className="font-mono">{contentType}</span>
                         </div>
-                        <button className="px-5 py-2 bg-green-600 hover:bg-green-700 rounded-md text-white font-medium transition">
-                            Save Configuration
+                        <button
+                            onClick={handleSave}
+                            disabled={isSaving}
+                            className={`px-5 py-2 rounded-md text-white font-medium transition ${
+                                isSaving
+                                    ? 'bg-green-800 cursor-not-allowed opacity-70'
+                                    : 'bg-green-600 hover:bg-green-700'
+                            }`}
+                        >
+                            {isSaving ? 'Saving...' : 'Save Configuration'}
                         </button>
                     </div>
                 </div>

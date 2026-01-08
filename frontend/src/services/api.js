@@ -39,7 +39,7 @@ export const deleteRequests = async (token) => {
 
 export const fetchUserPage = async (token) => {
   const res = await fetch(`/api/db/page`, {
-    method: 'POST', 
+    method: 'GET', 
     headers: {
       'Authorization': token
     }
@@ -54,7 +54,7 @@ export const updateUserPage = async (token, content) => {
       'Authorization': token,
       'Content-Type': 'application/json'
     },
-    body: content
+    body: JSON.stringify(content)
   });
   if (!res.ok) throw new Error('Failed to update user page');
 }

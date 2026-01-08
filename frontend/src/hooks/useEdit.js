@@ -10,8 +10,8 @@ export function useEdit() {
         const load = async () => {
             const token = localStorage.getItem('hookId');
             try {
-                const data = await fetchUserPage(token);
-                setContent(data);
+                // const data = await fetchUserPage(token);
+                // setContent(data);
             } catch(e) {
                 setError(e);
             }
@@ -22,7 +22,7 @@ export function useEdit() {
 
     const updateContent = async (newResponse) => {
         const token = localStorage.getItem('hookId');
-        await updateUserContent(token, newResponse);
+        await updateUserPage(token, newResponse);
     };
 
     return { content, error, updateContent };
