@@ -10,7 +10,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 function WebhookView() {
   const [darkMode, setDarkMode] = useState(true);
-  const { hookId, webhookUrl } = useWebhook();
+  const { hookId, webhookUrl, loading } = useWebhook(); // note: loading added
   const navigate = useNavigate();
 
   const {
@@ -31,17 +31,33 @@ function WebhookView() {
 
   const bgClass = darkMode ? 'bg-gray-900' : 'bg-gray-50';
   const textClass = darkMode ? 'text-gray-100' : 'text-gray-900';
-  const {urlUuid} = useParams(); 
+
+  // Get the ID from the URL (rename for clarity)
+  const { hookId: urlId } = useParams();
 
   useEffect(() => {
-  if (!urlUuid || urlUuid != hookId) {
-    navigate(`/v/${hookId}`);
+    if (loading || !hookId) return;
+    if (!urlId) {
+      navigate(`/v/${hookId}`);
+      return;
+    }
+    if (urlId !== hookId) {
+      navigate(`/v/${hookId}`, { replace: true });
+    }
+  }, [urlId, hookId, loading, navigate]);
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading webhook...</div>;
   }
-  }, [urlUuid, hookId, navigate]); 
 
   return (
     <div className={`min-h-screen ${bgClass} ${textClass} transition-colors duration-200`}>
-      <Header darkMode={darkMode} setDarkMode={setDarkMode} requestCount={requests.length} />
+      <Header
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        requestCount={requests.length || 0}
+        hookId={hookId}
+      />
 
       <main className="max-w-7xl mx-auto px-4 py-6">
         <WebhookUrlBar webhookUrl={webhookUrl} darkMode={darkMode} />
@@ -58,7 +74,6 @@ function WebhookView() {
             />
           </div>
 
-          {/* Request Details */}
           <div className="lg:col-span-3">
             <RequestDetails
               request={selectedRequest}
