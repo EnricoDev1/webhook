@@ -36,3 +36,25 @@ export const deleteRequests = async (token) => {
   });
   if (!res.ok) throw new Error('Failed to delete reqeusts');
 }
+
+export const fetchUserPage = async (token) => {
+  const res = await fetch(`/api/db/page`, {
+    method: 'POST', 
+    headers: {
+      'Authorization': token
+    }
+  });
+  if (!res.ok) throw new Error('Failed to retrieve user page');
+}
+
+export const updateUserPage = async (token, content) => {
+  const res = await fetch(`/api/db/page`, {
+    method: 'POST', 
+    headers: {
+      'Authorization': token,
+      'Content-Type': 'application/json'
+    },
+    body: content
+  });
+  if (!res.ok) throw new Error('Failed to update user page');
+}

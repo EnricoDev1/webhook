@@ -12,7 +12,6 @@ export default function RequestDetails({
   onDelete,
   darkMode,
 }) {
-  console.log(request);
   if (!request) {
     return (
       <div className={`h-full flex flex-col items-center justify-center rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-gray-50'} px-8`}>
