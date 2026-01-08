@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import ErrorToast from '../components/ErrorToast';
+import Toast from '../components/Toast';
 import { useEdit } from '../hooks/useEdit';
 
-function WebhookView() {
+function WebhookEdit() {
     const [darkMode] = useState(true);
     const [errors, setErrors] = useState([]);
     const [isSaving, setIsSaving] = useState(false);
@@ -18,6 +18,17 @@ function WebhookView() {
     const textClass = darkMode ? 'text-gray-100' : 'text-gray-900';
     const cardBg = darkMode ? 'bg-gray-800' : 'bg-white';
     const borderClass = darkMode ? 'border-gray-700' : 'border-gray-200';
+
+    const [toasts, setToasts] = useState([]); // gestiamo più toast
+
+    const addToast = (message, type = 'error') => {
+        const id = Date.now();
+        setToasts(prev => [...prev, { id, message, type }]);
+    };
+
+    const removeToast = (id) => {
+        setToasts(prev => prev.filter(t => t.id !== id));
+    };
 
     const addError = (msg) => {
         const id = Date.now();
@@ -58,14 +69,14 @@ function WebhookView() {
             const payload = {
                 statusCode: parseInt(statusCode, 10),
                 contentType: contentType,
-                content: btoa(responseBody) // codifica in base64 prima di inviare
+                content: btoa(responseBody)
             };
 
             await updateContent(payload);
-            // Opzionale: toast di successo
-            // addError('Configuration saved successfully!');
+
+            addToast('Configuration saved successfully', 'success');
         } catch (err) {
-            addError(err.message || 'Failed to save configuration');
+            addToast(err.message || 'Failed to save configuration', 'error');
         } finally {
             setIsSaving(false);
         }
@@ -73,11 +84,12 @@ function WebhookView() {
 
     return (
         <div className={`min-h-screen ${bgClass} ${textClass} transition-colors duration-200`}>
-            {errors.map(err => (
-                <ErrorToast
-                    key={err.id}
-                    message={err.message}
-                    onClose={() => setErrors(prev => prev.filter(e => e.id !== err.id))}
+            {toasts.map(toast => (
+                <Toast
+                    key={toast.id}
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => removeToast(toast.id)}
                 />
             ))}
 
@@ -144,11 +156,10 @@ function WebhookView() {
                         <button
                             onClick={handleSave}
                             disabled={isSaving}
-                            className={`px-5 py-2 rounded-md text-white font-medium transition ${
-                                isSaving
-                                    ? 'bg-green-800 cursor-not-allowed opacity-70'
-                                    : 'bg-green-600 hover:bg-green-700'
-                            }`}
+                            className={`px-5 py-2 rounded-md text-white font-medium transition ${isSaving
+                                ? 'bg-green-800 cursor-not-allowed opacity-70'
+                                : 'bg-green-600 hover:bg-green-700'
+                                }`}
                         >
                             {isSaving ? 'Saving...' : 'Save Configuration'}
                         </button>
@@ -159,4 +170,4 @@ function WebhookView() {
     );
 }
 
-export default WebhookView;
+export default WebhookEdit;
