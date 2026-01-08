@@ -7,8 +7,7 @@ export const useSocket = (onNewRequest) => {
 
   useEffect(() => {
     const socket = io('/', {
-      transports: ['websocket'],
-      query: { hookId: localStorage.getItem('hookId') }, // Send hookId so server knows which client
+      query: { hookId: localStorage.getItem('hookId') } 
     });
 
     socketRef.current = socket;
@@ -34,7 +33,6 @@ export const useSocket = (onNewRequest) => {
       }
     });
 
-    // Cleanup on unmount
     return () => {
       socket.disconnect();
       socketRef.current = null;

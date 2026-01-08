@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchRequests, deleteRequest, deleteRequests } from '../services/api';
+import { getHookId, fetchRequests, deleteRequest, deleteRequests } from '../services/api';
 
 export function useRequests() {
   const [requests, setRequests] = useState([]);
@@ -8,9 +8,16 @@ export function useRequests() {
   useEffect(() => {
     const load = async () => {
       const token = localStorage.getItem('hookId');
-      const data = await fetchRequests(token);
-
-      setRequests(data);
+      let data;
+      try {
+        data = await fetchRequests(token);
+      } catch (e) {
+        let newId = await getHookId();
+        localStorage.setItem("hookId", newId);
+        window.location.reload();
+      } finally {
+        setRequests(data);
+      }
     };
 
     load();
@@ -28,10 +35,10 @@ export function useRequests() {
   }
 
   const deleteAllRequests = async () => {
-    const token = localStorage.getItem('hookId'); 
+    const token = localStorage.getItem('hookId');
     await deleteRequests(token);
     console.log("dicoawadawd");
-    
+
     setRequests([]);
     setSelectedRequest(null);
   }

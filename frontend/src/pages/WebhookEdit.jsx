@@ -7,7 +7,6 @@ function WebhookEdit() {
     const [errors, setErrors] = useState([]);
     const [isSaving, setIsSaving] = useState(false);
 
-    // Stati locali per i campi modificabili
     const [statusCode, setStatusCode] = useState('200');
     const [contentType, setContentType] = useState('text/html');
     const [responseBody, setResponseBody] = useState(''); // questo è il testo decodificato
@@ -35,19 +34,17 @@ function WebhookEdit() {
         setErrors(prev => [...prev, { id, message: msg }]);
     };
 
-    // Quando i dati vengono caricati dal hook (content), aggiorna gli stati locali
     useEffect(() => {
         if (content) {
             setStatusCode(content.statusCode?.toString() || '200');
             setContentType(content.contentType || 'text/html');
 
-            // Decodifica il contenuto base64 (se presente)
             if (content.content) {
                 try {
                     const decoded = atob(content.content);
                     setResponseBody(decoded);
                 } catch (e) {
-                    setResponseBody(content.content); // fallback se non è base64
+                    setResponseBody(content.content);
                     addError('Failed to decode response body (not base64?)');
                 }
             } else {
@@ -56,10 +53,9 @@ function WebhookEdit() {
         }
     }, [content]);
 
-    // Gestione errore dal hook
     useEffect(() => {
         if (error) {
-            addError(error.message || 'Failed to load webhook configuration');
+            addError(error.message || 'Failed to load default configuration');
         }
     }, [error]);
 

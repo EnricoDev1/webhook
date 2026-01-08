@@ -1,9 +1,9 @@
 export const getHookId = async () => {
-  const res = await fetch('/api/hookId', {
+  const response = await fetch('/api/hookId', {
     method: 'POST'
   });
-  if (!res.ok) throw new Error('Failed to get hookId');
-  const data = await res.json();
+  if (!response.ok) throw new Error('Failed to get hook ID');
+  const data = await response.json();
   return data.id;
 };
 
@@ -13,7 +13,7 @@ export const fetchRequests = async (token) => {
       'Authorization': `${token}`
     },
   });
-  if (!res.ok) throw new Error('Failed to fetch requests');
+  if (!res.ok) throw new Error('Failed to fetch requests', res.status);
   return res.json();
 };
 
@@ -39,7 +39,7 @@ export const deleteRequests = async (token) => {
 
 export const fetchUserPage = async (token) => {
   const res = await fetch(`/api/page`, {
-    method: 'GET', 
+    method: 'GET',
     headers: {
       'Authorization': token
     }
@@ -51,7 +51,7 @@ export const fetchUserPage = async (token) => {
 
 export const updateUserPage = async (token, content) => {
   const res = await fetch(`/api/page`, {
-    method: 'POST', 
+    method: 'POST',
     headers: {
       'Authorization': token,
       'Content-Type': 'application/json'
