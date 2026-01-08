@@ -74,6 +74,43 @@ const createPage = async (req, res) => {
     }
 };
 
+const getPage = async (req, res) => {
+    try {
+        const hookId = req.headers.authorization;
+        const pagesDir = path.join(__dirname, '../pages');
+        let filePath = path.join(pagesDir, `${hookId}.page`);
+        let data;
+        try {
+            data = await fs.readFile(filePath, 'utf8');
+        } catch {
+            try {
+                filePath = path.join(pagesDir, 'default.page');
+                data = await fs.readFile(filePath, 'utf8');
+            } catch {
+                return res.status(404).json({ error: 'Pagina non trovata' });
+            }
+        }
+
+        const [statusLine, contentTypeLine, , ...bodyLines] = data.split('\n');
+
+        const statusCode = parseInt(statusLine, 10);
+        const contentType = contentTypeLine;
+        const body = bodyLines.join('\n');
+
+        const content = Buffer.from(body, 'utf8').toString('base64');
+
+        res.json({
+            statusCode,
+            contentType,
+            content
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Errore lettura pagina' });
+    }
+};
 
 
-export { createHook, sendHookMessage, createPage };
+
+
+export { createHook, sendHookMessage, createPage, getPage };
