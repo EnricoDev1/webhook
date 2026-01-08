@@ -15,7 +15,7 @@ const isValidStatusCode = (code) => {
 
 const isValidContentType = (type) => {
     if (typeof type !== 'string') return false;
-    return Boolean(mime.lookup(type));
+    return Boolean(mime.contentType(type));
 };
 
 export { isBase64, isValidStatusCode, isValidContentType }
