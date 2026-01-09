@@ -8,6 +8,8 @@ import { redisConnection } from './database/connection.js';
 import { initRedis, attachRedis } from './middlewares/AttachRedis.js';
 import { initClients, attachClients } from './middlewares/AttachClients.js';
 import { cleanUp } from './utils/cleanFunctions/cleanUp.js';
+import consola from 'consola';
+consola.level = "debug";
 
 const app = express();
 const server = http.createServer(app);

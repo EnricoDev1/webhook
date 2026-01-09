@@ -6,6 +6,7 @@ import { setUser } from './User.js';
 import { setRequestByUser } from './Request.js';
 import { getFilesInfo, getSafeBody, normalizeClient } from '../utils/requestSanitizer.js';
 import { isBase64, isValidContentType, isValidStatusCode } from '../utils/pageValidation.js';
+import consola from 'consola';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -48,6 +49,9 @@ const sendHookMessage = (req, res) => {
     if (client) {
         client.emit("new-request", JSON.stringify(data));
     }
+    
+    consola.debug(`new request arrived on hook ${hookId}`)
+    
     setRequestByUser(req, res, data)
 };
 
@@ -68,7 +72,7 @@ const createPage = async (req, res) => {
 
         res.json({ message: 'Page saved' });
     } catch (err) {
-        console.error(err);
+        consola.error(err);
         res.status(500).json({ error: 'Error saving page' });
     }
 };
@@ -103,12 +107,9 @@ const getPage = async (req, res) => {
             content
         });
     } catch (err) {
-        console.error(err);
+        consola.error(err);
         res.status(500).json({ error: 'Error reading page content' });
     }
 };
-
-
-
 
 export { createHook, sendHookMessage, createPage, getPage };

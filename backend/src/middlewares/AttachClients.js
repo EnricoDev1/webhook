@@ -1,3 +1,5 @@
+import consola from 'consola';
+
 let io;
 const clients = new Map();
 const disconnected = new Map();
@@ -13,6 +15,7 @@ function initClients(socketServer) {
             disconnected.set(hookId, Date.now());
         });
     });
+    consola.success("Successfully set up sockets");    
 }
 
 function attachClients(req, res, next) {

@@ -16,7 +16,7 @@ const requireAuth = async (req, res, next) => {
 
         next();
     } catch (err) {
-        console.error(err);
+        consola.error(err);
         return res.status(500).json({ error: 'Internal error' });
     }
 };

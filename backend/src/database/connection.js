@@ -1,4 +1,5 @@
 import { createClient } from 'redis';
+import consola from 'consola';
 
 const redisConnection = async () => {
     const redisClient = createClient({
@@ -8,9 +9,9 @@ const redisConnection = async () => {
         },
     });
 
-    redisClient.on("error", (err) => console.error("Redis Client Error", err));
+    redisClient.on("error", (err) => consola.error("Redis Client Error", err));
     await redisClient.connect();
-    redisClient.on("connect", () => console.log("Redis client connected successfully"));
+    redisClient.on("connect", () => consola.success("Redis client connected successfully"));
     return redisClient;
 }
 

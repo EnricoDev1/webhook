@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import { checkUser } from '../utils/checkUser.js';
 import { fileURLToPath } from 'url';
+import consola from 'consola';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,9 +45,8 @@ const setRequestByUser = async (req, res, data) => {
         res.status(statusCode);
         res.set('Content-Type', contentType);
         res.send(body);
-
     } catch (err) {
-        console.error(err);
+        consola.error(err);
         return res.status(500).send('Server error');
     }
 };
@@ -72,6 +72,8 @@ const deleteRequestByUser = async (req, res) => {
 
     if (deleted === 0) return res.status(404).json({ error: "Request not found" });
 
+    consola.debug(`request ${requestId} deleted from ${req.userToken}`);
+
     return res.json({ message: "Succesfully deleted request" });
 };
 
@@ -84,9 +86,10 @@ const deleteAllRequestByUser = async (req, res) => {
             return res.status(404).json({ error: "No requests to delete" });
         }
 
+        consola.debug(`all requests deleted from ${req.userToken}`);
         return res.json({ message: "Successfully deleted all requests" });
     } catch (err) {
-        console.error(err);
+        consola.error(err);
         return res.status(500).json({ error: "Internal error" });
     }
 };
