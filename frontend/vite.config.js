@@ -6,7 +6,11 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
-    allowedHosts: ['hook.enricodev.xyz']
+    allowedHosts: ['hook.enricodev.xyz'],
+    hmr: {
+      protocol: 'wss',
+      host: 'hook.enricodev.xyz',
+    }
   },
   plugins: [react()],
 });

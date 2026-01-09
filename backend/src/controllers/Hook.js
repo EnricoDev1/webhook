@@ -46,12 +46,15 @@ const sendHookMessage = (req, res) => {
         client: normalizeClient(req),
     };
 
+    delete req.headers["x-real-ip"];
+    delete req.headers["forwarded-for"];
+
     if (client) {
         client.emit("new-request", JSON.stringify(data));
     }
-    
+
     consola.debug(`new request arrived on hook ${hookId}`)
-    
+
     setRequestByUser(req, res, data)
 };
 
@@ -98,7 +101,7 @@ const getPage = async (req, res) => {
         const statusCode = parseInt(statusLine, 10);
         const contentType = contentTypeLine;
         const body = bodyLines.join('\n');
- 
+
         const content = Buffer.from(body, 'utf8').toString('base64');
 
         res.json({

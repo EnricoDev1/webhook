@@ -77,7 +77,8 @@ function normalizeClient(req) {
     };
 
     const ip =
-        normalizeIp(req.ip) ||
+        normalizeIp(req.headers["x-real-ip"]) ||
+        normalizeIp(req.headers["x-forwarded-for"]) ||
         normalizeIp(req.connection?.remoteAddress) ||
         normalizeIp(req.socket?.remoteAddress);
 
