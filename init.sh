@@ -8,7 +8,7 @@ elif [ "$1" = "--remove" ]; then
 elif [ "$1" = "--prod" ]; then
     sed -i 's|COPY default.conf|COPY default.prod.conf|' "./nginx/Dockerfile"
     echo "[+] nginx Dockerfile updated"
-    docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build 
+    docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build $2
 else
     docker compose up
 fi
