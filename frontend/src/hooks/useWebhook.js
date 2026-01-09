@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BASE_URL } from '../config';
+import { BASE_URL } from '../config/index';
 import { getHookId } from '../services/api';
 
 export const useWebhook = () => {

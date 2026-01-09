@@ -4,3 +4,4 @@ requests.http
 /backend/src/pages/*
 !/backend/src/pages/default.page
 .env
+./frontend/dist
