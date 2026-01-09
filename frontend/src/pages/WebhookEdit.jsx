@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Toast from '../components/Toast';
 import { useEdit } from '../hooks/useEdit';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function WebhookEdit() {
+    const navigate = useNavigate();
+    const { uuid } = useParams();
     const [darkMode] = useState(true);
     const [errors, setErrors] = useState([]);
     const [isSaving, setIsSaving] = useState(false);
@@ -89,10 +92,25 @@ function WebhookEdit() {
                 />
             ))}
 
-            <header className="border-b border-gray-700 px-6 py-4">
-                <h1 className="text-2xl font-bold">Edit Webhook Response</h1>
-                <p className="text-sm text-gray-500 mt-1">Configure the response your webhook will return</p>
+            <header className="border-b border-gray-700 px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h1 className="text-2xl font-bold">Edit Webhook Response</h1>
+                    <p className="text-sm text-gray-500 mt-1">
+                        Configure the response your webhook will return
+                    </p>
+                </div>
+
+                <button
+                    onClick={() => navigate(`/v/${uuid}/`)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-md
+                   bg-blue-600 hover:bg-blue-700
+                   text-white font-medium
+                   transition shadow-md"
+                >
+                    ← Torna alla view
+                </button>
             </header>
+
 
             <main className="max-w-7xl mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
