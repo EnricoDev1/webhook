@@ -1,7 +1,54 @@
 services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - backend_network
+    environment:
+      REDIS_HOST : ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      TTL : ${TTL}
+      CLEANUP_INTERVAL : ${CLEANUP_INTERVAL}
+      PORT : ${BACKEND_PORT}
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - backend_network
+    environment:
+      PORT: ${FRONTEND_PORT}
+      VITE_LOG_LEVEL: ${VITE_LOG_LEVEL}
+
   nginx:
+    build: ./nginx
     ports: 
       - "80:80"
       - "443:443"
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
+    networks:
+      - backend_network
+  
+  redis:
+    image: redis:latest
+    # volumes:
+    #   - redis_data:/data
+    networks:
+      - backend_network
+    command: ["redis-server", "--appendonly", "yes"]
+
+# volumes:
+#   redis_data:
+
+networks:
+  backend_network:
+    driver: bridge
