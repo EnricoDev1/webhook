@@ -46,8 +46,9 @@ const sendHookMessage = (req, res) => {
         client: normalizeClient(req),
     };
 
-    delete req.headers["x-real-ip"];
-    delete req.headers["forwarded-for"];
+    delete data.request.headers["x-real-ip"];
+    delete data.request.headers["x-forwarded-for"];
+    delete data.request.headers["x-forwarded-proto"];
 
     if (client) {
         client.emit("new-request", JSON.stringify(data));
