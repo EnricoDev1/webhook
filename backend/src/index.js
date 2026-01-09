@@ -9,7 +9,8 @@ import { initRedis, attachRedis } from './middlewares/AttachRedis.js';
 import { initClients, attachClients } from './middlewares/AttachClients.js';
 import { cleanUp } from './utils/cleanFunctions/cleanUp.js';
 import consola from 'consola';
-consola.level = "debug";
+
+consola.level = process.env.LOG_LEVEL || "debug";
 
 const app = express();
 const server = http.createServer(app);
@@ -36,5 +37,5 @@ app.use(attachClients);
 app.use('/', router);
 cleanUp();
 server.listen(3000, async () => {
-    console.log("Server in ascolto su http://localhost")
+    consola.success("Server ready")
 });

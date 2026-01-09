@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
+import consola from "consola";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,10 +11,10 @@ export async function cleanPages(hookId) {
         const pagesDir = path.join(__dirname, '../../pages');
         const filePath = path.join(pagesDir, `${hookId}.page`);
         await fs.unlink(filePath);
-        console.log(`[cleanPages] File ${hookId}.page deleted`);
+        consola.debug(`[cleanPages] File ${hookId}.page deleted`);
     } catch (error) {
         if (error.code !== 'ENOENT') {
-            console.error(`Error deleting file ${hookId}.page:`, error);
+            consola.error(`Error deleting file ${hookId}.page:`, error);
         }
     }
 }

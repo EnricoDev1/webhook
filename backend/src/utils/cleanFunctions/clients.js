@@ -1,11 +1,12 @@
 import { clients } from "../../middlewares/AttachClients.js";
+import consola from "consola";
 
 export function cleanClients(hookId) {
     const removed = clients.delete(hookId);
 
     if (removed) {
-        console.log(`[cleanClients] Client ${hookId} removed from Map`);
+        consola.debug(`[cleanClients] Client ${hookId} removed from Map`);
     } else {
-        console.log(`[cleanClients] Client ${hookId} not found in Map`);
+        consola.debug(`[cleanClients] Client ${hookId} not found in Map`);
     }
 }
