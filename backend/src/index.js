@@ -7,7 +7,7 @@ import { router } from './routes/index.js'
 import { redisConnection } from './database/connection.js';
 import { initRedis, attachRedis } from './middlewares/AttachRedis.js';
 import { initClients, attachClients } from './middlewares/AttachClients.js';
-import { cleanUp } from './utils/cleanFunctions/cleanUp.js';
+import { cleanAll } from './utils/cleanFunctions/cleanUp.js';
 import consola from 'consola';
 
 consola.level = process.env.LOG_LEVEL || "debug";
@@ -35,7 +35,7 @@ const io = new Server(server, {
 initClients(io);
 app.use(attachClients);
 app.use('/', router);
-cleanUp();
+cleanAll();
 server.listen(3000, async () => {
     consola.success("Server ready")
 });

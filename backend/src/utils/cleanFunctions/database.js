@@ -10,3 +10,12 @@ export async function cleanDb(token) {
         consola.error(`Error deleting user ${token} from Redis:`, error);
     }
 }
+
+export async function cleanAllDb() {
+    try {
+        await redisClient.flushDb();
+        consola.debug(`[cleanAllDb] Full Redis cleanup completed`);
+    } catch (error) {
+        consola.error(`[cleanAllDb] Error during full Redis cleanup:`, error);
+    }
+}
