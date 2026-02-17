@@ -24,7 +24,7 @@ Ensure you have **Docker** and **Docker Compose** installed.
 
 2. Start the application:
    ```bash
-   docker-compose up --build -d
+   docker compose up --build -d
    ```
 
 3. Access the application:
