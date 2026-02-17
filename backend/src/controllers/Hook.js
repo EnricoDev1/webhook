@@ -70,6 +70,14 @@ const createPage = async (req, res) => {
             return res.status(400).json({ error: 'Base64 non valido' });
 
         const body = Buffer.from(content, 'base64').toString('utf8');
+        
+        const sizeBytes = Buffer.byteLength(body, 'utf8');
+        if (sizeBytes > process.env.MAX_REQUEST_SIZE) {
+            return res.status(413).json({
+                error: 'Page content too large',
+                maxSize: '2Kb'
+            });
+        }
 
         const fileData = `${sc}\n${ct}\n\n${body}`;
         await fs.writeFile(path.join(__dirname, '../pages', `${req.userToken}.page`), fileData, 'utf8');
