@@ -1,5 +1,3 @@
-# Webhook Inspector
-
 ![Language](https://img.shields.io/badge/language-JavaScript-yellow)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Docker](https://img.shields.io/badge/docker-ready-cyan)
