@@ -8,9 +8,8 @@ A real-time tool to receive, inspect, and debug incoming webhooks using WebSocke
 
 ## System Architecture
 
-- **Frontend**: React + Vite + TailwindCSS (Real-time dashboard).
-- **Backend**: Node.js + Express + Socket.io (Webhook ingestion and streaming).
-- **Pub/Sub**: Redis (Handles message distribution between server instances).
+- **Frontend**: React + Vite + TailwindCSS
+- **Backend**: Node.js + Express + Socket.io + Redis
 - **Proxy**: Nginx (Reverse proxy for routing traffic to frontend and backend).
 
 ## Installation and Startup
@@ -45,7 +44,7 @@ Ensure you have **Docker** and **Docker Compose** installed.
 
 ## Environment Variables
 
-Configure these variables in your `.env` file before running the containers.
+Configure these variables in your `.env` file.
 
 | Variable | Description | Default Value | Required |
 |----------|-------------|---------------|----------|
