@@ -23,7 +23,7 @@ export default function BodyPanel({ body, darkMode, codeBg }) {
             </tbody>
           </table>
         ) : (
-          <div className="text-gray-500 italic text-sm">{'<empty>'}</div>
+          <div className="text-gray-500 italic text-sm">{'No body data'}</div>
         )}
       </div>
   )

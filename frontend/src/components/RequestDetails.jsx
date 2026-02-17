@@ -32,7 +32,6 @@ export default function RequestDetails({
 
   return (
     <div className={`h-full flex flex-col ${cardBg} rounded-xl shadow-xl border ${border}`}>
-      {/* Header */}
       <div className={`px-6 py-5 border-b ${border} flex justify-between items-start`}>
         <div>
           <div className="flex items-center gap-4 mb-3">
@@ -76,26 +75,38 @@ export default function RequestDetails({
         </div>
       </div>
 
-      {/* Main Content - Two Columns */}
       <div className="flex-1 overflow-y-auto p-6">
         <div className="grid grid-cols-1 gap-8">
-          <HeadersPanel
-            headers={request.request.headers}
-            darkMode={darkMode}
-            codeBg={codeBg}
-          />
+          
+          <div>
+            <HeadersPanel
+              headers={request.request.headers}
+              darkMode={darkMode}
+              codeBg={codeBg}
+            />
+          </div>
 
-          <BodyPanel
-            body={request.request.body}
-            darkMode={darkMode}
-            codeBg={codeBg}
-          />
+          <div className="space-y-3">
+            <h3 className={`text-sm font-bold uppercase tracking-widest ${textMuted}`}>
+              Request Body
+            </h3>
+            <BodyPanel
+              body={request.request.body}
+              darkMode={darkMode}
+              codeBg={codeBg}
+            />
+          </div>
 
-          <QueryParamsPanel
-            queryParams={request.request.query}
-            darkMode={darkMode}
-            codeBg={codeBg}
-          />
+          <div className="space-y-3">
+            <h3 className={`text-sm font-bold uppercase tracking-widest ${textMuted}`}>
+              Query Parameters
+            </h3>
+            <QueryParamsPanel
+              queryParams={request.request.query}
+              darkMode={darkMode}
+              codeBg={codeBg}
+            />
+          </div>
           
         </div>
       </div>
