@@ -27,7 +27,7 @@ Ensure you have **Docker** and **Docker Compose** installed.
 
 3. Access the application:
    - Frontend: `http://localhost:8080`
-   - Webhook Endpoint: `http://localhost:8080/api/`
+   - Webhook Endpoint: `http://localhost:8080/{uuid}`
 
 ## Folder Structure
 
