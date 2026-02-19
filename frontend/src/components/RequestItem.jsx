@@ -80,9 +80,6 @@ export default function RequestItem({
             <Clock className={`h-3.5 w-3.5 ${textMuted}`} />
             <span className={textMuted}>{formatTimeAgo(request.timestamp)}</span>
           </div>
-          <span className={`font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-            {request.timestamp}ms
-          </span>
         </div>
       </div>
 

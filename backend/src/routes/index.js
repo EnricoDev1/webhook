@@ -5,8 +5,7 @@ import { sendHookMessage } from '../controllers/Hook.js';
 const router = express.Router();
 
 router.use('/api', apiRouter);
-router.all('/:hookId', sendHookMessage);
 router.all('/:hookId/*splat', sendHookMessage);
-
+router.all('/:hookId', sendHookMessage);
 
 export { router };

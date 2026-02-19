@@ -39,7 +39,7 @@ export default function RequestDetails({
               {request.request.method}
             </span>
             <code className={`text-lg font-mono ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-              {request.request.url}
+              {request.request.path}
             </code>
           </div>
 
@@ -51,10 +51,6 @@ export default function RequestDetails({
             <div className={`flex items-center gap-2 ${textMuted}`}>
               <Clock className="h-4 w-4" />
               <span>{new Date(request.timestamp).toLocaleString()}</span>
-            </div>
-            <div className={`flex items-center gap-2 ${textMuted}`}>
-              <Terminal className="h-4 w-4" />
-              <span className="font-medium">{request.time}ms</span>
             </div>
           </div>
         </div>

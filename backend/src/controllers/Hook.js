@@ -20,15 +20,18 @@ const sendHookMessage = (req, res) => {
     const hookId = req.params.hookId;
     const client = req.clients.get(hookId);
 
+    consola.log("req.originalUrl", req.originalUrl);
+    consola.log("req.path", req.path);
+    consola.log("req.baseUrl", req.baseUrl);    
+
     const data = {
         id: uuid(),
         hookId: hookId,
         timestamp: Date.now(),
-
         request: {
             method: req.method.toUpperCase(),
             url: req.originalUrl,
-            path: req.path,
+            path: '/' + req.url.split('/').slice(2).join('/'),
             baseUrl: req.baseUrl,
             hostname: req.hostname,
             protocol: req.protocol,
@@ -36,7 +39,6 @@ const sendHookMessage = (req, res) => {
             headers: req.headers,
 
             query: req.query,
-            params: req.params,
 
             body: getSafeBody(req.body, req.headers['content-type']),
 
