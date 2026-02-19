@@ -2,17 +2,17 @@
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Docker](https://img.shields.io/badge/docker-ready-cyan)
 
-A real-time tool to receive, inspect, and debug incoming webhooks using WebSockets and Redis.
+# Real-time simple webhook system
 
-## System Architecture
+## Architecture
 
-- **Frontend**: React + Vite + TailwindCSS
-- **Backend**: Node.js + Express + Socket.io + Redis
-- **Proxy**: Nginx (Reverse proxy for routing traffic to frontend and backend).
+- **Frontend**: React + Vite + Socket.io (client) + TailwindCSS
+- **Backend**: Node.js + Express + Socket.io (server) + Redis
+- **Proxy**: Nginx (Reverse proxy).
 
 ## Installation and Startup
 
-Ensure you have **Docker** and **Docker Compose** installed.
+Ensure to fill the `.env` file with proper values.
 
 1. Clone the repository:
    ```bash
