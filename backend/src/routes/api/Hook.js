@@ -7,4 +7,8 @@ const hookRouter = express.Router();
 hookRouter.post("/hookid", createHook);
 hookRouter.post("/page", requireAuth, createPage);
 hookRouter.get("/page", requireAuth, getPage);
+
+hookRouter.use((req, res) => {
+  res.status(404).json({ error: 'Root not found' });
+});
 export { hookRouter };
